@@ -12,7 +12,7 @@ pca.learn(x)
 z = pca.transform(x, k=2) # k=2 dimentional subspace
 
 fig1 = plt.figure(1)
-title = plt.title("PCA on iris datase")
+title = plt.title("PCA on iris dataset")
 plot = plt.scatter(z[:,0], z[:,1], c=y)
 labx = plt.xlabel("First component")
 laby = plt.ylabel("Second component")
