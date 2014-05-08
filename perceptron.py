@@ -40,13 +40,13 @@ class Perceptron(object):
         a training phase
         """
         for t in xrange(self._T):
-            self._outputs = self.recall(self._inputs)
+            self._outputs = self.predict(self._inputs)
             self._w += self._eta * np.dot(self._inputs.T, self._targets - self._outputs)
         print '--- training phase ---'
         print 'weights:'
         print self._w
 
-    def recall(self, x):
+    def predict(self, x):
         """
         activataion function
 
@@ -64,9 +64,9 @@ def main():
     p = Perceptron(inputs, targets)
     p.train()
 
-    print '--- recall phase ---'
+    print '--- predict phase ---'
     inputs_bias = np.concatenate((-np.ones((inputs.shape[0], 1)), inputs), axis=1)
-    print p.recall(inputs_bias)
+    print p.predict(inputs_bias)
 
 if __name__ == '__main__':
     main()
