@@ -22,8 +22,7 @@ class MLP(object):
         self._v = np.random.rand(self._m+1, self._h) * 0.1 - 0.05
         self._w = np.random.rand(self._h+1, self._n) * 0.1 - 0.05
 
-        self._bias = - np.ones((self._N, 1))
-        self._inputs = np.concatenate((self._bias, inputs), axis=1)
+        self._inputs = inputs
         self._targets = targets
         self._outputs = np.zeros((self._N, self._n))
 
@@ -47,11 +46,12 @@ class MLP(object):
         pass
 
     def predict(self, x):
+        x = np.concatenate((-np.ones((x.shape[0], 1)), x), axis=1)
         hid = self.__sigmoid(np.dot(x, self._v))
 
-        hid = np.concatenate((self._bias, hid), axis=1)
+        hid = np.concatenate((-np.ones((hid.shape[0], 1)), hid), axis=1)
         y = self.__sigmoid(np.dot(hid, self._w))
-        return np.where(y > 0, 1, 0)
+        return y
 
     def __sigmoid(self, z):
         """
@@ -68,9 +68,7 @@ def main():
     mlp.train()
 
     print '--- predict phase ---'
-    inputs_bias = np.concatenate((-np.ones((inputs.shape[0],
-                                            1)), inputs), axis=1)
-    print mlp.predict(inputs_bias)
+    print mlp.predict(inputs)
 
 if __name__ == '__main__':
     main()
