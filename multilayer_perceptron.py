@@ -7,19 +7,17 @@ class MLP(object):
     """
     3 Layered Perceptron
     """
-    def __init__(self, inputs, targets, hidden_layer_size=2, beta=0.01):
+    def __init__(self, inputs, targets, hidden_layer_size=2):
         """
         N: Number of training data
         m: Input layer size
         n: Output layer size
         h: Hidden layer size
-        beta: Paramter for sigmoid function
         """
         self._N = inputs.shape[0]
         self._m = inputs.shape[1]
         self._n = targets.shape[1]
         self._h = hidden_layer_size
-        self._beta = beta
 
         self._v = np.random.rand(self._m+1, self._h) * 0.1 - 0.05
         self._w = np.random.rand(self._h+1, self._n) * 0.1 - 0.05
@@ -49,18 +47,17 @@ class MLP(object):
         pass
 
     def predict(self, x):
-        hid = np.dot(x, self._v)
-        hid = np.where(self.__actf(hid) > 0, 1, 0)
+        hid = self.__sigmoid(np.dot(x, self._v))
 
         hid = np.concatenate((self._bias, hid), axis=1)
-        y = np.dot(hid, self._w)
-        return np.where(self.__actf(y) > 0, 1, 0)
+        y = self.__sigmoid(np.dot(hid, self._w))
+        return np.where(y > 0, 1, 0)
 
-    def __actf(self, vec):
+    def __sigmoid(self, z):
         """
-        Activation function
+        Sigmoid function(Activation function)
         """
-        return (1 / (1 + np.exp(-self._beta * vec)))
+        return (1.0 / (1.0 + np.exp(z)))
 
 
 def main():
