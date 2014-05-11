@@ -5,20 +5,20 @@ import numpy as np
 
 class MLP(object):
     """
-    Multi Layer Perceptron
+    3 Layered Perceptron
     """
-    def __init__(self, inputs, targets, num_hidden_neuron, beta=0.01):
+    def __init__(self, inputs, targets, hidden_layer_size=2, beta=0.01):
         """
         N: Number of training data
-        m: Number of input neuron
-        n: Number of output neuron
-        h: Number of hidden neuron
+        m: Input layer size
+        n: Output layer size
+        h: Hidden layer size
         beta: Paramter for sigmoid function
         """
         self._N = inputs.shape[0]
         self._m = inputs.shape[1]
         self._n = targets.shape[1]
-        self._h = num_hidden_neuron
+        self._h = hidden_layer_size
         self._beta = beta
 
         self._v = np.random.rand(self._m+1, self._h) * 0.1 - 0.05
@@ -29,10 +29,11 @@ class MLP(object):
         self._targets = targets
         self._outputs = np.zeros((self._N, self._n))
 
+        print '--- initialize ---'
         print 'Num of training data: %d' % self._N
-        print 'Num of input dim.: %d' % self._m
-        print 'Num of output dim.: %d' % self._n
-        print 'Num of hidden nueron: %d' % self._h
+        print 'Input layer size: %d' % self._m
+        print 'Output layer size: %d' % self._n
+        print 'Hidden layer size: %d' % self._h
 
     def train(self):
         """
@@ -66,7 +67,7 @@ def main():
     inputs = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
     targets = np.array([[0], [1], [1], [0]])
 
-    mlp = MLP(inputs, targets, num_hidden_neuron=2)
+    mlp = MLP(inputs, targets, hidden_layer_size=2)
     mlp.train()
 
     print '--- predict phase ---'
