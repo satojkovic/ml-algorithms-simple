@@ -43,15 +43,17 @@ class MLP(object):
             Update the ouput layer weights
             Update the hidden layer weights
         """
-        pass
+        hid = self.__forward(self._v, self._inputs)
+        y = self.__forward(self._w, hid)
 
     def predict(self, x):
-        x = np.concatenate((-np.ones((x.shape[0], 1)), x), axis=1)
-        hid = self.__sigmoid(np.dot(x, self._v))
-
-        hid = np.concatenate((-np.ones((hid.shape[0], 1)), hid), axis=1)
-        y = self.__sigmoid(np.dot(hid, self._w))
+        hid = self.__forward(self._v, x)
+        y = self.__forward(self._w, hid)
         return y
+
+    def __forward(self, weights, x):
+        x = np.concatenate((-np.ones((x.shape[0], 1)), x), axis=1)
+        return self.__sigmoid(np.dot(x, weights))
 
     def __sigmoid(self, z):
         """
