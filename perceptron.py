@@ -35,7 +35,7 @@ class Perceptron(object):
         print 'Num of input dim.: %d' % self._m
         print 'Num of output dim.: %d' % self._n
 
-    def train(self):
+    def fit(self):
         """
         a training phase
         """
@@ -62,7 +62,7 @@ def main():
     targets = np.array([[0], [1], [1], [1]])
 
     p = Perceptron(inputs, targets)
-    p.train()
+    p.fit()
 
     print '--- predict phase ---'
     inputs_bias = np.concatenate((-np.ones((inputs.shape[0], 1)), inputs), axis=1)
