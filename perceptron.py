@@ -68,7 +68,7 @@ def gen_data(n):
     xr = (rand(n)*2-1)/2+0.5
     yr = (rand(n)*2-1)/2-0.5
     inputs = inputs + [[xr[i], yr[i]] for i in xrange(len(xr))]
-    targets = targets + [[i] for i in repeat(-1, len(xr))]
+    targets = targets + [[i] for i in repeat(0, len(xr))]
 
     return np.array(inputs), np.array(targets)
 
