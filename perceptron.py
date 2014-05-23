@@ -85,13 +85,15 @@ def main():
     print p.predict(inputs_bias)
 
     print '\n'
-    inputs2, targets2 = gen_data(10)
+    inputs2, targets2 = gen_data(20)
     p2 = Perceptron(inputs2, targets2)
     p2.fit()
 
     print '\n--- predict phase ---'
-    inputs_bias2 = np.concatenate((-np.ones((inputs2.shape[0], 1)), inputs2), axis=1)
-    print p2.predict(inputs_bias2)
+    test_inputs2, test_targets2 = gen_data(10)
+    test_inputs_bias2 = np.concatenate((-np.ones((test_inputs2.shape[0], 1)), test_inputs2), axis=1)
+    print p2.predict(test_inputs_bias2)
+
 
 if __name__ == '__main__':
     main()
