@@ -2,6 +2,7 @@
 
 import numpy as np
 from pylab import rand
+import matplotlib.pyplot as plt
 from itertools import repeat
 
 
@@ -94,6 +95,12 @@ def main():
     test_inputs_bias2 = np.concatenate((-np.ones((test_inputs2.shape[0], 1)), test_inputs2), axis=1)
     print p2.predict(test_inputs_bias2)
 
+    for i, x in enumerate(test_inputs2):
+        if test_targets2[i][0] == 1:
+            plt.plot(x[0], x[1], 'ob')
+        else:
+            plt.plot(x[0], x[1], 'or')
+    plt.show()
 
 if __name__ == '__main__':
     main()
