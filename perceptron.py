@@ -1,7 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import numpy as np
-from pylab import rand
+from pylab import rand, norm
 import matplotlib.pyplot as plt
 from itertools import repeat
 
@@ -27,7 +27,7 @@ class Perceptron(object):
         self._N = inputs.shape[0]
         self._m = inputs.shape[1]
         self._n = targets.shape[1]
-        self._w = np.random.rand(self._m+1, self._n) * 0.1 - 0.05
+        self.w = np.random.rand(self._m+1, self._n) * 0.1 - 0.05
 
         bias = - np.ones((self._N, 1))
         self._inputs = np.concatenate((bias, inputs), axis=1)
@@ -44,10 +44,10 @@ class Perceptron(object):
         """
         for t in xrange(self._T):
             self._outputs = self.predict(self._inputs)
-            self._w += self._eta * np.dot(self._inputs.T, self._targets - self._outputs)
+            self.w += self._eta * np.dot(self._inputs.T, self._targets - self._outputs)
         print '--- training phase ---'
         print 'weights:'
-        print self._w
+        print self.w
 
     def predict(self, x):
         """
@@ -56,7 +56,7 @@ class Perceptron(object):
         x: N x m array
         w: m x n array
         """
-        y = np.dot(x, self._w)
+        y = np.dot(x, self.w)
         return np.where(y > 0, 1, 0)
 
 
@@ -100,6 +100,12 @@ def main():
             plt.plot(x[0], x[1], 'ob')
         else:
             plt.plot(x[0], x[1], 'or')
+
+    n = norm(p2.w)
+    ww = p2.w / n
+    ww1 = [ww[1], -ww[0]]
+    ww2 = [-ww[1], ww[0]]
+    plt.plot([ww1[0], ww2[0]], [ww1[1], ww2[1]], '--k')
     plt.show()
 
 if __name__ == '__main__':
