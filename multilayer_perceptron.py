@@ -32,17 +32,7 @@ class MLP(object):
         print 'Output layer size: %d' % self._n
         print 'Hidden layer size: %d' % self._h
 
-    def train(self):
-        """
-        Forward phase:
-            Compute the activation of each neuron j in the hidden leyers,
-            work through the network until you get to the ouput layers
-        Backward phase:
-            Compute the error at the output
-            Compute the error in the hidden layers
-            Update the ouput layer weights
-            Update the hidden layer weights
-        """
+    def fit(self):
         hid = self.__forward(self._v, self._inputs)
         y = self.__forward(self._w, hid)
 
@@ -67,7 +57,7 @@ def main():
     targets = np.array([[0], [1], [1], [0]])
 
     mlp = MLP(inputs, targets, hidden_layer_size=2)
-    mlp.train()
+    mlp.fit()
 
     print '--- predict phase ---'
     print mlp.predict(inputs)
