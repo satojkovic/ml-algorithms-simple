@@ -16,7 +16,7 @@ class MLP(object):
         self.w = np.random.uniform(-1.0, 1.0, (self.nout, self.nhid+1))
 
     def fit(self, inputs, targets, learning_rate=0.2, epochs=10000):
-        inputs = self.__add_bias(inputs)
+        inputs = self.__add_bias(inputs, axis=1)
         targets = np.array(targets)
 
         for loop_cnt in xrange(epochs):
@@ -27,7 +27,7 @@ class MLP(object):
 
             # forward phase
             gjp = self.__sigmoid(np.dot(self.v, xp))
-            gjp = np.insert(gjp, 0, 1)
+            gjp = self.__add_bias(gjp)
             gkp = self.__sigmoid(np.dot(self.w, gjp))
 
             # backward phase(back prop)
@@ -44,14 +44,14 @@ class MLP(object):
 
     def predict(self, x):
         x = np.array(x)
-        x = np.insert(x, 0, 1)
+        x = self.__add_bias(x)
         hid = self.__sigmoid(np.dot(self.v, x))
-        hid = np.insert(hid, 0, 1)
+        hid = self.__add_bias(hid)
         y = self.__sigmoid(np.dot(self.w, hid))
         return y
 
-    def __add_bias(self, x):
-        return np.insert(x, 0, 1, axis=1)
+    def __add_bias(self, x, axis=None):
+        return np.insert(x, 0, 1, axis=axis)
 
     def __sigmoid(self, u):
         """
