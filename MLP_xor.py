@@ -9,10 +9,9 @@ def main():
     targets = np.array([0, 1, 1, 0])
 
     # initialize
-    mlp = MLP(inputs, targets, n_hidden_units=3)
+    mlp = MLP(n_input_units=2, n_hidden_units=3, n_output_units=1)
 
     print '--- initialize ---'
-    print 'Num of training data: %d' % mlp.ntd
     print 'Num of input layer units: %d' % mlp.nin
     print 'Num of hidden layer units: %d' % mlp.nhid
     print 'Num of output layer units: %d' % mlp.nout

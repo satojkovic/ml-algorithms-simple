@@ -7,17 +7,10 @@ class MLP(object):
     """
     3 Layered Perceptron
     """
-    def __init__(self, inputs, targets, n_hidden_units=3):
-        """
-        p: Number of training data
-        m: Number of input layer units
-        n: Number of output layer units
-        h: Number of hidden layer units
-        """
-        self.ntd = inputs.shape[0]
-        self.nin = inputs.shape[1]
+    def __init__(self, n_input_units, n_hidden_units, n_output_units):
+        self.nin = n_input_units
         self.nhid = n_hidden_units
-        self.nout = targets.size / self.ntd
+        self.nout = n_output_units
 
         self.v = np.random.uniform(-1.0, 1.0, (self.nhid, self.nin+1))
         self.w = np.random.uniform(-1.0, 1.0, (self.nout, self.nhid+1))
