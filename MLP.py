@@ -61,3 +61,11 @@ class MLP(object):
 
     def __sigmoid_deriv(self, u):
         return (u * (1 - u))
+
+    def print_configuration(self):
+        print '--- NN configuration ---'
+        print 'Num of input layer units: %d' % self.nin
+        print 'Num of hidden layer units: %d' % self.nhid
+        print 'Num of output layer units: %d' % self.nout
+        print 'Shape of first layer weight(v):', self.v.shape
+        print 'Shape of second layer weight(w):', self.w.shape
