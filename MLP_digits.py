@@ -16,12 +16,7 @@ def main():
     X /= X.max()
 
     mlp = MLP(64, 100, 10)
-    print '--- initialize ---'
-    print 'Num of input layer units: %d' % mlp.nin
-    print 'Num of hidden layer units: %d' % mlp.nhid
-    print 'Num of output layer units: %d' % mlp.nout
-    print 'Shape of first layer weight(v):', mlp.v.shape
-    print 'Shape of second layer weight(w):', mlp.w.shape
+    mlp.print_configuration()
 
     X_train, X_test, y_train, y_test = train_test_split(X, y)
     labels_train = LabelBinarizer().fit_transform(y_train)

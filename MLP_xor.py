@@ -10,13 +10,7 @@ def main():
 
     # initialize
     mlp = MLP(n_input_units=2, n_hidden_units=3, n_output_units=1)
-
-    print '--- initialize ---'
-    print 'Num of input layer units: %d' % mlp.nin
-    print 'Num of hidden layer units: %d' % mlp.nhid
-    print 'Num of output layer units: %d' % mlp.nout
-    print 'Shape of first layer weight(v):', mlp.v.shape
-    print 'Shape of second layer weight(w):', mlp.w.shape
+    mlp.print_configuration()
 
     # training
     mlp.fit(inputs, targets)
