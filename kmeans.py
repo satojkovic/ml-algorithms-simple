@@ -32,7 +32,7 @@ def kmeans(data, k, max_iter=300):
     labels = np.random.randint(0, k, len(data))
 
     iter = 0
-    center = np.zeros([2, 2])
+    center = np.zeros([k, 2])
     while 1:
         # calculate the cluster centers
         for i in range(k):
