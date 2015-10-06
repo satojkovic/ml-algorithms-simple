@@ -45,6 +45,8 @@ def kmeans(data, k, max_iter=300):
 
         if np.array_equal(labels, new_labels) or iter > max_iter:
             break
+        else:
+            labels = new_labels
 
         iter += 1
 
