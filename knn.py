@@ -6,12 +6,13 @@ import matplotlib.pyplot as plt
 
 
 def main():
-    trainData = np.random.randint(0, 100, (50, 2)).astype(np.float32)
-    trainLabel = np.random.randint(0, 2, (50, 1)).astype(np.float32)
+    dtrain = np.random.randint(0, 100, (50, 2)).astype(np.float32)
+    dtr_label = np.random.randint(0, 2, (50, 1)).astype(np.float32)
+    dtest = np.random.randint(0, 100, (5, 2)).astype(np.float32)
 
     # plot trainData
-    red = trainData[trainLabel.ravel() == 0]
-    blue = trainData[trainLabel.ravel() == 1]
+    red = dtrain[dtr_label.ravel() == 0]
+    blue = dtrain[dtr_label.ravel() == 1]
     plt.scatter(red[:, 0], red[:, 1], c='r')
     plt.scatter(blue[:, 0], blue[:, 1], c='b', marker='x')
 
