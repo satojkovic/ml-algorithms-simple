@@ -10,3 +10,4 @@ Algorithms
 * [kmeans](https://en.wikipedia.org/wiki/K-means_clustering)
 * [kmeans++](https://en.wikipedia.org/wiki/K-means%2B%2B)
 * [k nearest neighbors](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)
+* [kdtree](https://en.wikipedia.org/wiki/K-d_tree)
