@@ -5,7 +5,7 @@
 import numpy as np
 import multivariate_normal
 from collections import defaultdict
-from math import sqrt
+from math import sqrt, pi
 import sys
 
 
@@ -14,6 +14,9 @@ MIN_DIST_GROUP = 0.1
 
 
 def euclid_dist(p1, p2):
+    if len(p1) != len(p2):
+        raise Exception("Mismatch dimension")
+
     return sqrt(sum([
         (p1[n] - p2[n]) ** 2 for n in range(len(p1))
     ]))
@@ -40,8 +43,23 @@ def nearest_cluster(pts, cluster):
     return cluster_idx
 
 
-def mean_shift(p, points, bandwidth):
-    return p
+def gauss_kernel(dist, bandwidth):
+    val = (1/(bandwidth*sqrt(2*pi))) * np.exp(-0.5*((dist / bandwidth)) ** 2)
+    return val
+
+
+def mean_shift(p_now, points, bandwidth):
+    shift_x, shift_y = 0., 0.
+    scale_factor = 0.
+    for pts in points:
+        dist = euclid_dist(p_now, pts)
+        weight = gauss_kernel(dist, bandwidth)
+        shift_x += pts[0] * weight
+        shift_y += pts[1] * weight
+        scale_factor += weight
+    shift_x /= scale_factor
+    shift_y /= scale_factor
+    return np.array([shift_x, shift_y])
 
 
 def mean_shift_clustering(points, bandwidth):
@@ -59,7 +77,7 @@ def mean_shift_clustering(points, bandwidth):
 
         # create cluster
         cluster_idx = nearest_cluster(p_new, cluster)
-        cluster[cluster_idx].append(p_new)  # cluster center
+        cluster[cluster_idx] = p_new  # cluster center
         cluster_pts[cluster_idx].append(p_now)
 
     return cluster, cluster_pts
