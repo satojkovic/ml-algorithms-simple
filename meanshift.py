@@ -11,9 +11,9 @@ from math import sqrt
 MIN_DIST = 0.0001
 
 
-def euclid_dist(p_new, p_start):
+def euclid_dist(p1, p2):
     return sqrt(sum([
-        (p_new[n] - p_start[n]) ** 2 for n in range(len(p_new))
+        (p1[n] - p2[n]) ** 2 for n in range(len(p1))
     ]))
 
 
