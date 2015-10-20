@@ -44,9 +44,9 @@ def load_dataset():
     X_val = X_val.reshape((-1, 1, 28, 28))
     X_test = X_test.reshape((-1, 1, 28, 28))
 
-    y_train = y_train.astype(np.int)
-    y_val = y_val.astype(np.int)
-    y_test = y_test.astype(np.int)
+    y_train = y_train.astype(np.int32)
+    y_val = y_val.astype(np.int32)
+    y_test = y_test.astype(np.int32)
 
     return X_train, y_train, X_val, y_val, X_test, y_test
 
