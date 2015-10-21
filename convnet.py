@@ -102,6 +102,18 @@ def main():
     # Train the network
     nn = net1.fit(X_train, y_train)
 
+    # Prediction
+    preds = net1.predict(X_test)
+
+    # Confusion matrix
+    cm = confusion_matrix(y_test, preds)
+    plt.matshow(cm)
+    plt.title('Confusion matrix')
+    plt.colorbar()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.show()
+
 
 if __name__ == '__main__':
     main()
