@@ -53,7 +53,6 @@ def load_dataset():
 
 def main():
     X_train, y_train, X_val, y_val, X_test, y_test = load_dataset()
-    plt.imshow(X_train[0][0], cmap=cm.binary)
 
     net1 = NeuralNet(
         layers=[('input', layers.InputLayer),
