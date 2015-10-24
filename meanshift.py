@@ -9,10 +9,6 @@ from math import sqrt, pi
 import sys
 
 
-MIN_DIST = 0.0001
-MIN_DIST_GROUP = 0.1
-
-
 def euclid_dist(p1, p2):
     if len(p1) != len(p2):
         raise Exception("Mismatch dimension")
@@ -22,65 +18,56 @@ def euclid_dist(p1, p2):
     ]))
 
 
-def dist_to_cluster(pts, cluster):
+def mean_shift(x, points, bandwidth):
+    dists = [euclid_dist(x, p) for p in points]
+    distances = np.array(dists).reshape(len(dists), 1)
+    weights = np.exp(-1 * (distances ** 2) / (bandwidth ** 2))
+    return np.sum(points * weights, axis=0) / np.sum(weights)
+
+
+def nearest_cluster(mean, cluster_centers):
+    nearest = None
+    diff_thresh = 1e-1
     min_dist = sys.float_info.max
-    min_dist_cluster_idx = None
-    for idx, center in cluster.items():
-        dist = euclid_dist(pts, center)
+    for center in cluster_centers:
+        dist = euclid_dist(mean, center)
         if dist < min_dist:
             dist = min_dist
-            min_dist_cluster_idx = idx
-    return min_dist_cluster_idx, min_dist
+            min_center = center
+
+    if dist > diff_thresh:
+        nearest = min_center
+
+    return nearest
 
 
-def nearest_cluster(pts, cluster):
-    cluster_idx = None
-    idx, dist = dist_to_cluster(pts, cluster)
-    if dist < MIN_DIST_GROUP:
-        cluster_idx = idx
+def assign_cluster(mean, cluster_centers):
+    if len(cluster_centers) == 0:
+        cluster_centers.append(mean)
     else:
-        cluster_idx = len(cluster) + 1
-    return cluster_idx
+        nearest = nearest_cluster(mean, cluster_centers)
+        if nearest is None:
+            cluster_centers.append(mean)
+    return cluster_centers
 
 
-def gauss_kernel(dist, bandwidth):
-    val = (1/(bandwidth*sqrt(2*pi))) * np.exp(-0.5*((dist / bandwidth)) ** 2)
-    return val
+def mean_shift_clustering(points, bandwidth, max_iterations=300):
+    stop_thresh = 1e-3 * bandwidth
+    cluster_centers = []
 
-
-def mean_shift(p_now, points, bandwidth):
-    shift_x, shift_y = 0., 0.
-    scale_factor = 0.
-    for pts in points:
-        dist = euclid_dist(p_now, pts)
-        weight = gauss_kernel(dist, bandwidth)
-        shift_x += pts[0] * weight
-        shift_y += pts[1] * weight
-        scale_factor += weight
-    shift_x /= scale_factor
-    shift_y /= scale_factor
-    return np.array([shift_x, shift_y])
-
-
-def mean_shift_clustering(points, bandwidth):
-    cluster = defaultdict(list)
-    cluster_pts = defaultdict(list)
-
-    for p in points:
-        p_now = p
+    for weighted_mean in points:
+        iter = 0
         while True:
-            p_new = mean_shift(p_now, points, bandwidth)
-            dist = euclid_dist(p_new, p_now)
-            p_now = p_new
-            if dist < MIN_DIST:
+            old_mean = weighted_mean
+            weighted_mean = mean_shift(old_mean, points, bandwidth)
+            converged = euclid_dist(weighted_mean, old_mean) < stop_thresh
+            if converged or iter == max_iterations:
+                cluster_centers = assign_cluster(weighted_mean,
+                                                 cluster_centers)
                 break
+            iter += 1
 
-        # create cluster
-        cluster_idx = nearest_cluster(p_new, cluster)
-        cluster[cluster_idx] = p_new  # cluster center
-        cluster_pts[cluster_idx].append(p_now)
-
-    return cluster, cluster_pts
+    return cluster_centers
 
 
 def main():
@@ -89,8 +76,9 @@ def main():
 
     # mean shift clustering
     bandwidth = 3
-    cluster, cluster_pts = mean_shift_clustering(X, bandwidth)
-    print 'Num. of clusters:', len(cluster)
+    cluster_centers = mean_shift_clustering(X, bandwidth)
+    print 'Num. of clusters:', len(cluster_centers)
+    print cluster_centers
 
 
 if __name__ == '__main__':
