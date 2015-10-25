@@ -32,10 +32,10 @@ def nearest_cluster(mean, cluster_centers):
     for center in cluster_centers:
         dist = euclid_dist(mean, center)
         if dist < min_dist:
-            dist = min_dist
+            min_dist = dist
             min_center = center
 
-    if dist > diff_thresh:
+    if min_dist < diff_thresh:
         nearest = min_center
 
     return nearest
