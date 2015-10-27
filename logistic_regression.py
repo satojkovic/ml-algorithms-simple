@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import sys
 import multivariate_normal
 from sklearn.cross_validation import train_test_split
+import numpy as np
 
 
-def main():
-    pass
+def sigmoid(X):
+    return (1 / (1 + np.exp(-1 * X)))
 
 
 def main():
