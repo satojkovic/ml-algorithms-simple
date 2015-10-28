@@ -10,6 +10,14 @@ def sigmoid(X):
     return (1 / (1 + np.exp(-1 * X)))
 
 
+def compute_cost(theta, X, y):
+    pass
+
+
+def compute_grad(theta, X, y):
+    pass
+
+
 def main():
     # load sample data
     X, X_label = multivariate_normal.load_data_with_label()
