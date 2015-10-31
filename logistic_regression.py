@@ -39,7 +39,7 @@ def main():
     X, X_label = multivariate_normal.load_data_with_label()
 
     # split all data into train and test set
-    X_train, X_label_train, X_test, X_label_test = train_test_split(X, X_label)
+    X_train, X_test, X_label_train, X_label_test = train_test_split(X, X_label)
 
     # compute theta
     m, dim = X.shape
