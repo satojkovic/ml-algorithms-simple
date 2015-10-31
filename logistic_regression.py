@@ -7,13 +7,16 @@ import numpy as np
 
 
 def sigmoid(X):
-    return (1 / (1 + np.exp(-1 * X)))
+    OVERFLOW_THRESH = -709
+    X = np.sum(X)
+    return 0.0 if X < OVERFLOW_THRESH else (1 / (1 + np.exp(-1.0 * X)))
 
 
 def compute_cost(theta, X, y):
     m = len(X)
     cost = np.sum(
-        [yy*np.log(sigmoid(theta.T*xx)) + (1-yy)*np.log(1-sigmoid(theta.T*xx))
+        [yy * np.log(sigmoid(theta.T * xx) + np.finfo(np.float32).eps)
+         + (1-yy) * np.log(1-sigmoid(theta.T * xx) + np.finfo(np.float32).eps)
          for (xx, yy) in zip(X, y)]
     )
     return (1./m)*cost
