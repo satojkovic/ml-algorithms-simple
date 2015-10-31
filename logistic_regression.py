@@ -4,6 +4,7 @@
 import multivariate_normal
 from sklearn.cross_validation import train_test_split
 import numpy as np
+from scipy.optimize import fmin_bfgs
 
 
 def sigmoid(X):
@@ -39,6 +40,13 @@ def main():
 
     # split all data into train and test set
     X_train, X_label_train, X_test, X_label_test = train_test_split(X, X_label)
+
+    # compute theta
+    m, dim = X.shape
+    initial_theta = np.zeros([dim, 1], dtype=np.float32)
+    theta = fmin_bfgs(compute_cost, initial_theta, args=(X_train,
+                                                         X_label_train))
+    print theta
 
 if __name__ == '__main__':
     main()
