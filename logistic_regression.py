@@ -11,11 +11,23 @@ def sigmoid(X):
 
 
 def compute_cost(theta, X, y):
-    pass
+    m = len(X)
+    cost = np.sum(
+        [yy*np.log(sigmoid(theta.T*xx)) + (1-yy)*np.log(1-sigmoid(theta.T*xx))
+         for (xx, yy) in zip(X, y)]
+    )
+    return (1./m)*cost
 
 
 def compute_grad(theta, X, y):
-    pass
+    m, dim = X.shape
+    grad = np.zeros([dim, 1])
+    for j in range(len(theta)):
+        grad[j] = np.sum(
+            [(sigmoid(theta.T*xx) - yy)*xx[j] for (xx, yy) in zip(X, y)]
+        )
+        grad[j] = 1./m
+    return grad
 
 
 def main():
