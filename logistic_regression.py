@@ -10,20 +10,22 @@ from scipy.optimize import fmin_bfgs
 def sigmoid(X):
     OVERFLOW_THRESH = -709
     X = np.sum(X)
-    return 0.0 if X < OVERFLOW_THRESH else (1 / (1 + np.exp(-1.0 * X)))
+    return 0.0 if X < OVERFLOW_THRESH else (1.0 / (1.0 + np.exp(-1.0 * X)))
 
 
 def compute_cost(theta, X, y):
+    X = add_bias(X)
     m = len(X)
     cost = np.sum(
-        [yy * np.log(sigmoid(theta.T * xx) + np.finfo(np.float32).eps)
-         + (1-yy) * np.log(1-sigmoid(theta.T * xx) + np.finfo(np.float32).eps)
+        [- yy * np.log(sigmoid(theta.T * xx) + np.finfo(np.float32).eps)
+         - (1-yy) * np.log(1-sigmoid(theta.T * xx) + np.finfo(np.float32).eps)
          for (xx, yy) in zip(X, y)]
     )
     return (1./m)*cost
 
 
 def compute_grad(theta, X, y):
+    X = add_bias(X)
     m, dim = X.shape
     grad = np.zeros([dim, 1])
     for j in range(len(theta)):
@@ -32,6 +34,11 @@ def compute_grad(theta, X, y):
         )
         grad[j] = 1./m
     return grad
+
+
+def add_bias(X):
+    X = np.insert(X, 0, 1, axis=1)
+    return X
 
 
 def main():
@@ -43,7 +50,8 @@ def main():
 
     # compute theta
     m, dim = X.shape
-    initial_theta = np.zeros([dim, 1], dtype=np.float32)
+    initial_theta = np.insert(np.zeros([dim, 1], dtype=np.float32),
+                              0, 1, axis=0)
     theta = fmin_bfgs(compute_cost, initial_theta, args=(X_train,
                                                          X_label_train))
     print theta
