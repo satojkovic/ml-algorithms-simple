@@ -5,6 +5,7 @@ import multivariate_normal
 from sklearn.cross_validation import train_test_split
 import numpy as np
 from scipy.optimize import fmin_bfgs
+import matplotlib.pyplot as plt
 
 
 def sigmoid(X):
@@ -55,6 +56,21 @@ def main():
     theta = fmin_bfgs(compute_cost, initial_theta, args=(X_train,
                                                          X_label_train))
     print theta
+
+    # plot test data
+    colors = ['r', 'b']
+    for i in range(2):
+        x, y = X_test[X_label_test == i, 0], X_test[X_label_test == i, 1]
+        plt.scatter(x, y, color=colors[i], marker='x')
+
+    # plot decision boundary
+    # intercept = theta[0]
+    a = -1.0 * theta[1] / theta[2]
+    xx = np.linspace(-20, 10)
+    yy = a * xx - theta[0] / theta[2]
+    plt.plot(xx, yy, 'k-')
+    plt.show()
+
 
 if __name__ == '__main__':
     main()
