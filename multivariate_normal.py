@@ -30,3 +30,11 @@ def load_data_with_label():
     X_label = np.r_[X1_label, X2_label]
 
     return X, X_label
+
+
+def load_data_single():
+    # sample data
+    mu1 = [1, 1]
+    cov1 = [[4, 0], [30, 100]]
+    X1 = np.random.multivariate_normal(mu1, cov1, N1)
+    return X1
