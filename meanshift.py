@@ -4,9 +4,9 @@
 
 import numpy as np
 import multivariate_normal
-from collections import defaultdict
-from math import sqrt, pi
+from math import sqrt
 import sys
+from sklearn.cluster import estimate_bandwidth
 
 
 def euclid_dist(p1, p2):
@@ -75,7 +75,7 @@ def main():
     X = multivariate_normal.load_data()
 
     # mean shift clustering
-    bandwidth = 3
+    bandwidth = estimate_bandwidth(X)
     cluster_centers = mean_shift_clustering(X, bandwidth)
     print 'Num. of clusters:', len(cluster_centers)
     print cluster_centers
