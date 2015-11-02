@@ -13,3 +13,5 @@ Algorithms
 * [kdtree](https://en.wikipedia.org/wiki/K-d_tree)
 * [convolutional neural network](http://blog.christianperone.com/2015/08/convolutional-neural-networks-and-feature-extraction-with-python/)
 * [mean shift](https://en.wikipedia.org/wiki/Mean_shift)
+* [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)
+* [linear regression](https://en.wikipedia.org/wiki/Linear_regression)
