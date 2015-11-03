@@ -67,7 +67,7 @@ def mean_shift_clustering(points, bandwidth, max_iterations=300):
                 break
             iter += 1
 
-    return cluster_centers
+    return np.asarray(cluster_centers)
 
 
 def main():
