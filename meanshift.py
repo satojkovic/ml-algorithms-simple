@@ -27,33 +27,43 @@ def mean_shift(x, points, bandwidth):
 
 def nearest_cluster(mean, cluster_centers):
     nearest = None
+    nearest_idx = None
     diff_thresh = 1e-1
     min_dist = sys.float_info.max
-    for center in cluster_centers:
+    min_center = None
+    min_idx = None
+    for idx, center in enumerate(cluster_centers):
         dist = euclid_dist(mean, center)
         if dist < min_dist:
             min_dist = dist
             min_center = center
+            min_idx = idx
 
     if min_dist < diff_thresh:
         nearest = min_center
+        nearest_idx = min_idx
 
-    return nearest
+    return nearest, nearest_idx
 
 
-def assign_cluster(mean, cluster_centers):
+def assign_cluster(mean, cluster_centers, points_labels):
     if len(cluster_centers) == 0:
         cluster_centers.append(mean)
+        points_labels.append(0)
     else:
-        nearest = nearest_cluster(mean, cluster_centers)
+        nearest, nearest_idx = nearest_cluster(mean, cluster_centers)
         if nearest is None:
             cluster_centers.append(mean)
-    return cluster_centers
+            points_labels.append(max(points_labels) + 1)
+        else:
+            points_labels.append(points_labels[nearest_idx])
+    return cluster_centers, points_labels
 
 
 def mean_shift_clustering(points, bandwidth, max_iterations=300):
     stop_thresh = 1e-3 * bandwidth
     cluster_centers = []
+    points_labels = []
 
     for weighted_mean in points:
         iter = 0
@@ -62,12 +72,13 @@ def mean_shift_clustering(points, bandwidth, max_iterations=300):
             weighted_mean = mean_shift(old_mean, points, bandwidth)
             converged = euclid_dist(weighted_mean, old_mean) < stop_thresh
             if converged or iter == max_iterations:
-                cluster_centers = assign_cluster(weighted_mean,
-                                                 cluster_centers)
+                cluster_centers, points_labels = assign_cluster(weighted_mean,
+                                                                cluster_centers,
+                                                                points_labels)
                 break
             iter += 1
 
-    return np.asarray(cluster_centers)
+    return np.asarray(cluster_centers), np.asarray(points_labels)
 
 
 def main():
@@ -75,10 +86,11 @@ def main():
     X = multivariate_normal.load_data()
 
     # mean shift clustering
-    bandwidth = estimate_bandwidth(X)
-    cluster_centers = mean_shift_clustering(X, bandwidth)
+    bandwidth = estimate_bandwidth(X, n_samples=500)
+    cluster_centers, points_labels = mean_shift_clustering(X, bandwidth)
     print 'Num. of clusters:', len(cluster_centers)
     print cluster_centers
+    print points_labels
 
 
 if __name__ == '__main__':
