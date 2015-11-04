@@ -51,6 +51,31 @@ def main():
     xx = np.linspace(-10, 10)
     yy = theta[0] + theta[1] * xx
     plt.plot(xx, yy, 'k-')
+    #plt.show()
+
+    # plot contour
+    theta0_vals = np.linspace(-10, 10, 100)
+    theta1_vals = np.linspace(-1, 4, 100)
+
+
+    #initialize J_vals to a matrix of 0's
+    J_vals = np.zeros(shape=(theta0_vals.size, theta1_vals.size))
+
+    #Fill out J_vals
+    for t1, element in enumerate(theta0_vals):
+        for t2, element2 in enumerate(theta1_vals):
+            thetaT = np.zeros(shape=(2, 1))
+            thetaT[0][0] = element
+            thetaT[1][0] = element2
+            J_vals[t1, t2] = compute_cost(thetaT, X, y)
+
+    #Contour plot
+    J_vals = J_vals.T
+    #Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100
+    plt.contour(theta0_vals, theta1_vals, J_vals, np.logspace(-2, 3, 20))
+    plt.xlabel('theta_0')
+    plt.ylabel('theta_1')
+    plt.scatter(theta[0][0], theta[1][0])
     plt.show()
 
 
