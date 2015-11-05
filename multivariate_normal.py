@@ -19,14 +19,12 @@ def load_data():
     mu1 = [1, 1]
     cov1 = [[4, 0], [30, 100]]
     X1 = np.random.multivariate_normal(mu1, cov1, N1)
-    X1_std = standardization(X1)
 
     mu2 = [-10, 20]
     cov2 = [[10, 3], [0, 20]]
     X2 = np.random.multivariate_normal(mu2, cov2, N2)
-    X2_std = standardization(X2)
 
-    X = np.r_[X1_std, X2_std]
+    X = np.r_[X1, X2]
 
     return X
 
@@ -46,5 +44,12 @@ def load_data_single():
     mu1 = [1, 1]
     cov1 = [[4, 0], [30, 100]]
     X1 = np.random.multivariate_normal(mu1, cov1, N1)
-    X1_std = standardization(X1)
-    return X1_std
+    return X1
+
+
+def load_norm_data():
+    X_ = load_data()
+    X1_std = standardization(X_[:N1])
+    X2_std = standardization(X_[N1:N1+N2])
+    X = np.r_[X1_std, X2_std]
+    return X
