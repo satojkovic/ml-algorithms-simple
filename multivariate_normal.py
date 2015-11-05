@@ -7,17 +7,26 @@ import numpy as np
 N1 = 1000
 N2 = 1000
 
+
+def standardization(X):
+    mean = np.mean(X, axis=0)
+    std = np.std(X, axis=0)
+    return (X - mean) / std
+
+
 def load_data():
     # sample data
     mu1 = [1, 1]
     cov1 = [[4, 0], [30, 100]]
     X1 = np.random.multivariate_normal(mu1, cov1, N1)
+    X1_std = standardization(X1)
 
     mu2 = [-10, 20]
     cov2 = [[10, 3], [0, 20]]
     X2 = np.random.multivariate_normal(mu2, cov2, N2)
+    X2_std = standardization(X2)
 
-    X = np.r_[X1, X2]
+    X = np.r_[X1_std, X2_std]
 
     return X
 
@@ -37,4 +46,5 @@ def load_data_single():
     mu1 = [1, 1]
     cov1 = [[4, 0], [30, 100]]
     X1 = np.random.multivariate_normal(mu1, cov1, N1)
-    return X1
+    X1_std = standardization(X1)
+    return X1_std
