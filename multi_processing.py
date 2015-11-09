@@ -2,12 +2,15 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+from multiprocessing import Pool
 
 
 class SimpleMapReduce(object):
 
     def __init__(self, map_func, reduce_func, num_workers=None):
-        pass
+        self.map_func = map_func
+        self.reduce_func = reduce_func
+        self.pool = Pool(num_workers)
 
     def partition(self, mapped_values):
         pass
