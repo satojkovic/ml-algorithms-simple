@@ -3,6 +3,7 @@
 
 import numpy as np
 from multiprocessing import Pool
+from collections import defaultdict
 
 
 class SimpleMapReduce(object):
@@ -13,7 +14,11 @@ class SimpleMapReduce(object):
         self.pool = Pool(num_workers)
 
     def partition(self, mapped_values):
-        pass
+        partitioned_data = defaultdict(list)
+        for sublist in mapped_values:
+            for key, value in sublist:
+                partitioned_data[key].append(value)
+        return partitioned_data
 
     def __call__(self, inputs, chunksize=1):
         pass
