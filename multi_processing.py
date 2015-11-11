@@ -21,7 +21,12 @@ class SimpleMapReduce(object):
         return partitioned_data
 
     def __call__(self, inputs, chunksize=1):
-        pass
+        mapped_values = self.pool.map(self.map_func, inputs,
+                                      chunksize=chunksize)
+        partitioned_data = self.partition(mapped_values)
+        reduced_values = self.pool.map(self.reduce_func,
+                                       partitioned_data.items())
+        return reduced_values
 
 
 def main():
