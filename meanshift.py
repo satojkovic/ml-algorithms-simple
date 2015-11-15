@@ -7,6 +7,7 @@ import multivariate_normal
 from math import sqrt
 import sys
 from sklearn.cluster import estimate_bandwidth
+from sklearn.cluster import MeanShift
 
 
 def euclid_dist(p1, p2):
@@ -81,6 +82,13 @@ def mean_shift_clustering(points, bandwidth, max_iterations=300):
     return np.asarray(cluster_centers), np.asarray(points_labels)
 
 
+def print_results(cluster_centers, labels):
+    print 'Num. of clusters:', (labels.max() + 1)
+    print 'Centers:', cluster_centers
+    print 'Cluster[0]:', len(labels[np.where(labels == 0)])
+    print 'Cluster[1]:', len(labels[np.where(labels == 1)])
+
+
 def main():
     # sample data
     X = multivariate_normal.load_data()
@@ -88,9 +96,14 @@ def main():
     # mean shift clustering
     bandwidth = estimate_bandwidth(X, n_samples=500)
     cluster_centers, points_labels = mean_shift_clustering(X, bandwidth)
-    print 'Num. of clusters:', len(cluster_centers)
-    print cluster_centers
-    print points_labels
+    print '*** My mean-shift clustering'
+    print_results(cluster_centers, points_labels)
+
+    # mean shift clustering by sklearn
+    ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+    ms.fit(X)
+    print '*** Mean-shift clustering by sklearn'
+    print_results(ms.cluster_centers_, ms.labels_)
 
 
 if __name__ == '__main__':
