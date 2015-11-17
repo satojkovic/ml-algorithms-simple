@@ -9,6 +9,8 @@ import sys
 from sklearn.cluster import estimate_bandwidth
 from sklearn.cluster import MeanShift
 from sklearn.neighbors import BallTree
+import matplotlib.pyplot as plt
+from itertools import cycle
 
 
 def euclid_dist(p1, p2):
@@ -93,6 +95,34 @@ def print_results(cluster_centers, labels):
     print 'Cluster[1]:', len(labels[np.where(labels == 1)])
 
 
+def plot_results(X, cluster_centers, labels, ms_sklearn):
+    plt.subplot(211)
+    plt.clf()
+
+    colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
+    for k, col in zip(range(cluster_centers.shape[0]), colors):
+        my_members = labels == k
+        cluster_center = cluster_centers[k]
+        plt.plot(X[my_members, 0], X[my_members, 1], col + '.')
+        plt.plot(cluster_center[0], cluster_center[1], 'o',
+                 markerfacecolor=col, markeredgecolor='k', markersize=14)
+
+    plt.subplot(212)
+    ms_labels = ms_sklearn.labels_
+    ms_cluster_centers = ms_sklearn.cluster_centers_
+
+    ms_labels_unique = np.unique(ms_labels)
+    n_clusters_ = len(ms_labels_unique)
+    for k, col in zip(range(n_clusters_), colors):
+        my_members = ms_cluster_centers == k
+        ms_cluster_center = ms_cluster_centers[k]
+        plt.plot(X[my_members, 0], X[my_members, 1], col + '.')
+        plt.plot(ms_cluster_center[0], ms_cluster_center[1], 'o',
+                 markerfacecolor=col, markeredgecolor='k', markersize=14)
+
+    plt.show()
+
+
 def main():
     # sample data
     X = multivariate_normal.load_data()
@@ -108,6 +138,9 @@ def main():
     ms.fit(X)
     print '*** Mean-shift clustering by sklearn'
     print_results(ms.cluster_centers_, ms.labels_)
+
+    # plot results
+    plot_results(X, cluster_centers, points_labels, ms)
 
 
 if __name__ == '__main__':
