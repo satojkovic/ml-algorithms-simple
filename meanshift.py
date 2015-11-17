@@ -72,7 +72,7 @@ def mean_shift_clustering(points, bandwidth, max_iterations=300):
         iter = 0
         while True:
             points_within = points[ball_tree.query_radius([weighted_mean],
-                                                          bandwidth)[0]]
+                                                          bandwidth*3)[0]]
             old_mean = weighted_mean
             weighted_mean = mean_shift(old_mean, points_within, bandwidth)
             converged = euclid_dist(weighted_mean, old_mean) < stop_thresh
