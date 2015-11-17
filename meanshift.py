@@ -99,11 +99,13 @@ def plot_results(X, cluster_centers, labels, ms_sklearn):
     plt.subplot(211)
     plt.clf()
 
+    Xnp = np.asarray(X)
+
     colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
     for k, col in zip(range(cluster_centers.shape[0]), colors):
         my_members = labels == k
         cluster_center = cluster_centers[k]
-        plt.plot(X[my_members, 0], X[my_members, 1], col + '.')
+        plt.plot(Xnp[my_members, 0], Xnp[my_members, 1], col + '.')
         plt.plot(cluster_center[0], cluster_center[1], 'o',
                  markerfacecolor=col, markeredgecolor='k', markersize=14)
 
@@ -116,7 +118,7 @@ def plot_results(X, cluster_centers, labels, ms_sklearn):
     for k, col in zip(range(n_clusters_), colors):
         my_members = ms_cluster_centers == k
         ms_cluster_center = ms_cluster_centers[k]
-        plt.plot(X[my_members, 0], X[my_members, 1], col + '.')
+        plt.plot(Xnp[my_members, 0], Xnp[my_members, 1], col + '.')
         plt.plot(ms_cluster_center[0], ms_cluster_center[1], 'o',
                  markerfacecolor=col, markeredgecolor='k', markersize=14)
 
