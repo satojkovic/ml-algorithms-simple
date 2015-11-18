@@ -96,11 +96,9 @@ def print_results(cluster_centers, labels):
 
 
 def plot_results(X, cluster_centers, labels, ms_sklearn):
-    plt.subplot(211)
-    plt.clf()
-
     Xnp = np.asarray(X)
 
+    plt.subplot(211)
     colors = cycle('bgrcmykbgrcmykbgrcmykbgrcmyk')
     for k, col in zip(range(cluster_centers.shape[0]), colors):
         my_members = labels == k
@@ -112,11 +110,10 @@ def plot_results(X, cluster_centers, labels, ms_sklearn):
     plt.subplot(212)
     ms_labels = ms_sklearn.labels_
     ms_cluster_centers = ms_sklearn.cluster_centers_
-
     ms_labels_unique = np.unique(ms_labels)
     n_clusters_ = len(ms_labels_unique)
     for k, col in zip(range(n_clusters_), colors):
-        my_members = ms_cluster_centers == k
+        my_members = ms_labels == k
         ms_cluster_center = ms_cluster_centers[k]
         plt.plot(Xnp[my_members, 0], Xnp[my_members, 1], col + '.')
         plt.plot(ms_cluster_center[0], ms_cluster_center[1], 'o',
