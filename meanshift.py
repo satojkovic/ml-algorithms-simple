@@ -60,7 +60,7 @@ def assign_cluster(mean, cluster_centers, points_labels):
             cluster_centers.append(mean)
             points_labels.append(max(points_labels) + 1)
         else:
-            points_labels.append(points_labels[nearest_idx])
+            points_labels.append(nearest_idx)
     return cluster_centers, points_labels
 
 
