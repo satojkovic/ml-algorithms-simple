@@ -68,15 +68,12 @@ def mean_shift_clustering(points, bandwidth, max_iterations=300):
     stop_thresh = 1e-3 * bandwidth
     cluster_centers = []
     points_labels = []
-    ball_tree = BallTree(points)
 
     for weighted_mean in points:
         iter = 0
         while True:
-            points_within = points[ball_tree.query_radius([weighted_mean],
-                                                          bandwidth*3)[0]]
             old_mean = weighted_mean
-            weighted_mean = mean_shift(old_mean, points_within, bandwidth)
+            weighted_mean = mean_shift(old_mean, points, bandwidth)
             converged = euclid_dist(weighted_mean, old_mean) < stop_thresh
             if converged or iter == max_iterations:
                 cluster_centers, points_labels = assign_cluster(weighted_mean,
