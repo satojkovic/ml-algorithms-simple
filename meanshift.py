@@ -64,16 +64,19 @@ def assign_cluster(mean, cluster_centers, points_labels):
     return cluster_centers, points_labels
 
 
-def mean_shift_clustering(points, bandwidth, max_iterations=300):
+def mean_shift_clustering(points, bandwidth, max_iterations=500):
     stop_thresh = 1e-3 * bandwidth
     cluster_centers = []
     points_labels = []
+    ball_tree = BallTree(points)
 
     for weighted_mean in points:
         iter = 0
         while True:
+            points_within = points[ball_tree.query_radius([weighted_mean],
+                                                          bandwidth*3)[0]]
             old_mean = weighted_mean
-            weighted_mean = mean_shift(old_mean, points, bandwidth)
+            weighted_mean = mean_shift(old_mean, points_within, bandwidth)
             converged = euclid_dist(weighted_mean, old_mean) < stop_thresh
             if converged or iter == max_iterations:
                 cluster_centers, points_labels = assign_cluster(weighted_mean,
@@ -88,8 +91,8 @@ def mean_shift_clustering(points, bandwidth, max_iterations=300):
 def print_results(cluster_centers, labels):
     print 'Num. of clusters:', (labels.max() + 1)
     print 'Centers:', cluster_centers
-    print 'Cluster[0]:', len(labels[np.where(labels == 0)])
-    print 'Cluster[1]:', len(labels[np.where(labels == 1)])
+    for i in range(labels.max()+1):
+        print 'Cluster[%d]: %d' % (i, len(labels[np.where(labels == i)]))
 
 
 def plot_results(X, cluster_centers, labels, ms_sklearn):
