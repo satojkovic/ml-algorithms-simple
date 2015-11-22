@@ -2,10 +2,30 @@
 # -*- coding: utf-8 -*-
 
 from simple_mapreduce import SimpleMapReduce
+import string
+import multiprocessing
 
 
 def file_to_words(filename):
-    pass
+    STOP_WORDS = set([
+        'a', 'an', 'and', 'are', 'as', 'be', 'for', 'if', 'in', 
+        'is', 'it', 'of', 'or', 'py', 'rst', 'the', 'to', 'with',
+    ])
+    TR = string.maketrans(string.punctuation, ' ' * len(string.punctuation))
+
+    print multiprocessing.current_process().name, 'reading', filename
+    output = []
+
+    with open(filename, 'rt') as f:
+        for line in f:
+            if line.lstrip().startswith('..'):
+                continue
+            line = line.translate(TR)
+            for word in line.split():
+                word = word.lower()
+                if word.isalpha() and word not in STOP_WORDS:
+                    output.append((word, 1))
+    return output
 
 
 def count_words(item):
