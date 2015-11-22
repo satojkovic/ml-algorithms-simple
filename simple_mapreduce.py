@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Reference: http://coreblog.org/ats/translation-of-implementing-mapreduce-with-python-multiprocessing-module/
+"""
+
 from multiprocessing import Pool
 from collections import defaultdict
 
