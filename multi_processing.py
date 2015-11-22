@@ -9,7 +9,8 @@ def file_to_words(filename):
 
 
 def count_words(item):
-    pass
+    word, occurances = item
+    return (word, sum(occurances))
 
 
 def main():
