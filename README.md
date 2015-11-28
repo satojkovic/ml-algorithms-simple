@@ -15,3 +15,4 @@ Algorithms
 * [mean shift](https://en.wikipedia.org/wiki/Mean_shift)
 * [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)
 * [linear regression](https://en.wikipedia.org/wiki/Linear_regression)
+* [Non negative matrix factorization](https://en.wikipedia.org/wiki/Non-negative_matrix_factorization)
