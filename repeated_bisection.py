@@ -5,7 +5,11 @@ import multivariate_normal
 
 
 def repeated_bisection(X):
-    pass
+    # initialize cluster
+    centers = []
+    X_labels = []
+
+    return centers, X_labels
 
 
 def main():
