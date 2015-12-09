@@ -14,8 +14,12 @@ def main():
     df = pd.read_csv('european_city_distances.csv', header=None, sep=';')
     data = df.as_matrix()
     cities = data[:, 0]
-    dists = data[:, 1:-1]
+    dists = data[:, 1:]
     dists /= np.amax(dists)
+
+    # mds
+    mds = MDS(n_components=2, dissimilarity='precomputed')
+    results = mds.fit(dists)
 
 if __name__ == '__main__':
     main()
