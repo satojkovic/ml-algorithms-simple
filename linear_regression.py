@@ -9,9 +9,9 @@ import matplotlib.pyplot as plt
 def compute_cost(theta, X, y):
     m = len(X)
     J = np.sum(
-        [(np.dot(theta.T, xx) - yy) ** 2 for (xx, yy) in zip(X, y)]
+        [(np.dot(theta.T, X[i]) - y[i]) ** 2 for i in range(m)]
     )
-    return (1./2*m) * J
+    return (1./(2*m)) * J
 
 
 def gradient_descent(theta, X, y, alpha, max_iter):
@@ -47,16 +47,15 @@ def main():
     print theta
 
     # plot sample data and predicted line
+    plt.subplot(2, 1, 1)
     plt.scatter(data[:, 0], data[:, 1], color='r', marker='x')
     xx = np.linspace(-10, 10)
     yy = theta[0] + theta[1] * xx
     plt.plot(xx, yy, 'k-')
-    #plt.show()
 
     # plot contour
     theta0_vals = np.linspace(-10, 10, 100)
     theta1_vals = np.linspace(-1, 4, 100)
-
 
     #initialize J_vals to a matrix of 0's
     J_vals = np.zeros(shape=(theta0_vals.size, theta1_vals.size))
@@ -72,7 +71,8 @@ def main():
     #Contour plot
     J_vals = J_vals.T
     #Plot J_vals as 15 contours spaced logarithmically between 0.01 and 100
-    plt.contour(theta0_vals, theta1_vals, J_vals, np.logspace(-2, 3, 20))
+    plt.subplot(2, 1, 2)
+    plt.contour(theta0_vals, theta1_vals, J_vals, np.logspace(-2, 3, 40))
     plt.xlabel('theta_0')
     plt.ylabel('theta_1')
     plt.scatter(theta[0][0], theta[1][0])
