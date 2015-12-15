@@ -54,6 +54,7 @@ def main():
     plt.scatter(theta[0][0], theta[1][0])
 
     # 3D contour plot
+    theta0_vals, theta1_vals = np.meshgrid(theta0_vals, theta1_vals)
     fig = plt.figure()
     ax = fig.gca(projection='3d')
     surf = ax.plot_surface(theta0_vals, theta1_vals, J_vals)
