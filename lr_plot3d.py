@@ -6,6 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import multivariate_normal
 import linear_regression
+from matplotlib import cm
 
 
 def main():
@@ -53,13 +54,23 @@ def main():
     plt.ylabel('theta_1')
     plt.scatter(theta[0][0], theta[1][0])
 
-    # 3D contour plot
+    # 3D contour and scatter plot
     theta0_vals, theta1_vals = np.meshgrid(theta0_vals, theta1_vals)
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    surf = ax.plot_surface(theta0_vals, theta1_vals, J_vals)
+    plt.hold(True)
+    
+    ax.plot_surface(theta0_vals, theta1_vals, J_vals, cmap=cm.hot)
     ax.view_init(elev=60, azim=50)
     ax.dist = 8
+
+    x_sct, y_sct = theta[0][0], theta[1][0]
+    thetaT_sct = np.zeros(shape=(2, 1))
+    thetaT_sct[0][0] = theta[0][0]
+    thetaT_sct[1][0] = theta[1][0]
+    z_sct = linear_regression.compute_cost(thetaT_sct, X, y)
+    ax.scatter(x_sct, y_sct, z_sct)
+
     plt.show()
 
 
