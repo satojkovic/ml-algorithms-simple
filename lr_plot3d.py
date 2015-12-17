@@ -59,8 +59,11 @@ def main():
     fig = plt.figure()
     ax = fig.gca(projection='3d')
     plt.hold(True)
-    
-    ax.plot_surface(theta0_vals, theta1_vals, J_vals, cmap=cm.hot)
+
+    ax.plot_surface(theta0_vals, theta1_vals, J_vals,
+                    cmap=cm.coolwarm, rstride=3, cstride=3,
+                    antialiased=True)
+
     ax.view_init(elev=60, azim=50)
     ax.dist = 8
 
