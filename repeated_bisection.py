@@ -13,7 +13,7 @@ def repeated_bisection(X):
     return clusters
 
 
-def print_results(clusters):
+def show_clusters(clusters):
     print 'n_clusters = ', len(clusters)
     for i in range(len(clusters)):
         print '** cluster %d:' % (i, clusters[i])
@@ -27,7 +27,7 @@ def main():
     clusters = repeated_bisection(X)
 
     # print results
-    print_results(clusters)
+    show_clusters(clusters)
 
 if __name__ == '__main__':
     main()
