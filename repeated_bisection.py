@@ -6,9 +6,16 @@ from collections import defaultdict
 import numpy as np
 
 
+def choose_randomly(X, n_clusters):
+    pass
+
+
 def section(X, clusters, n_clusters):
     if len(clusters) < n_clusters:
         return
+
+    # choose two cluster centers
+    clusters = choose_randomly(X, n_clusters)
 
 
 def repeated_bisection(X):
