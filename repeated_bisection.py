@@ -6,9 +6,17 @@ from collections import defaultdict
 import numpy as np
 
 
+def section(X, clusters, n_clusters):
+    if len(clusters) < n_clusters:
+        return
+
+
 def repeated_bisection(X):
     # <cluster_id, cluster_center>
     clusters = defaultdict(np.float)
+
+    # initial two clusters
+    section(X, clusters, 2)
 
     return clusters
 
