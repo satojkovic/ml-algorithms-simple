@@ -6,32 +6,47 @@ from collections import defaultdict
 import numpy as np
 
 
-def choose_randomly(X, n_clusters):
-    pass
+def choose_randomly(clusters, n_clusters):
+    cluster_centers = defaultdict(np.array)
+
+    for c in range(len(clusters)):
+        idx = np.random.randint(0, len(clusters[c]))
+        cluster_centers[c] = clusters[c][idx]
+
+    return cluster_centers
 
 
-def section(X, clusters, n_clusters):
-    if len(clusters) < n_clusters:
-        return
-
+def section(clusters, n_clusters):
     # choose two cluster centers
-    clusters = choose_randomly(X, n_clusters)
+    cluster_centers = choose_randomly(clusters, n_clusters)
+
+    return cluster_centers
 
 
-def repeated_bisection(X):
-    # <cluster_id, cluster_center>
-    clusters = defaultdict(np.float)
+def init_clusters(X):
+    clusters = defaultdict(list)
 
-    # initial two clusters
-    section(X, clusters, 2)
+    init_cluster_id = 0
+    for x in X:
+        clusters[init_cluster_id].append(x)
 
     return clusters
 
 
-def show_clusters(clusters):
-    print 'n_clusters = ', len(clusters)
-    for i in range(len(clusters)):
-        print '** cluster %d:' % (i, clusters[i])
+def repeated_bisection(X):
+    # <cluster_id, points>
+    clusters = init_clusters(X)
+
+    # initial two clusters
+    cluster_centers = section(clusters, 2)
+
+    return cluster_centers, clusters
+
+
+def show_clusters(cluster_centers, clusters):
+    print '* n_clusters = ', len(cluster_centers)
+    for i in range(len(cluster_centers)):
+        print '** cluster', i, ':', cluster_centers[i]
 
 
 def main():
@@ -39,10 +54,10 @@ def main():
     X = multivariate_normal.load_data()
 
     # Do repeated bisection clustering
-    clusters = repeated_bisection(X)
+    cluster_centers, clusters = repeated_bisection(X)
 
     # print results
-    show_clusters(clusters)
+    show_clusters(cluster_centers, clusters)
 
 if __name__ == '__main__':
     main()
