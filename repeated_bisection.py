@@ -6,10 +6,18 @@ from collections import defaultdict
 import numpy as np
 
 
+def recreate_clusters(clusters, cluster_centers):
+    pass
+
+
 def choose_randomly(clusters, cluster_id):
     cluster_centers = defaultdict(np.array)
     idx = np.random.randint(0, len(clusters[cluster_id]), 2)
     cluster_centers = clusters[cluster_id][idx]
+
+    # clustering for new cluster_centers
+    recreate_clusters(clusters, cluster_centers)
+
     return cluster_centers
 
 
