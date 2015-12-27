@@ -7,9 +7,8 @@ import numpy as np
 
 
 def cos_similarity(v1, v2):
-    numerator = np.sum([e1 * e2 for e1 in v1 for e2 in v2])
-    denominator = np.sqrt(np.sum([v * v for v in v1]) *
-                          np.sum([v * v for v in v2]))
+    numerator = np.dot(v1, v2)
+    denominator = np.sqrt(np.dot(v1, v1) * np.dot(v2, v2))
     return numerator / denominator if denominator != 0 else 0.0
 
 
@@ -18,14 +17,15 @@ def bisecting(clusters, cluster_id, cluster_centers):
 
     # cosine similarity
     for cidx, cluster in clusters.items():
-        max_similarity = -1.0
-        max_index = 0
-        for ccenter_idx, ccenter in enumerate(cluster_centers):
-            cos_sim = cos_similarity(cluster, ccenter)
-            if cos_sim > max_similarity:
-                max_similarity = cos_sim
-                max_index = ccenter_idx
-        sub_clusters[max_index].append(cluster)
+        for sample in cluster:
+            max_similarity = -1.0
+            max_index = 0
+            for ccenter_idx, ccenter in enumerate(cluster_centers):
+                cos_sim = cos_similarity(sample, ccenter)
+                if cos_sim > max_similarity:
+                    max_similarity = cos_sim
+                    max_index = ccenter_idx
+            sub_clusters[max_index].append(sample)
 
     return sub_clusters
 
@@ -71,7 +71,7 @@ def show_clusters(cluster_centers, clusters):
     print 'n_clusters = ', len(cluster_centers)
     for i in range(len(cluster_centers)):
         print 'cluster_center', i, ':', cluster_centers[i]
-        print clusters[i]
+        print 'n_samples :', len(clusters[i])
 
 
 def main():
