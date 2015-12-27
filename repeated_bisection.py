@@ -12,7 +12,7 @@ def cos_similarity(v1, v2):
     return numerator / denominator if denominator != 0 else 0.0
 
 
-def bisecting(clusters, cluster_id, cluster_centers):
+def section(clusters, cluster_id, cluster_centers):
     sub_clusters = defaultdict(list)
 
     # cosine similarity
@@ -38,12 +38,12 @@ def choose_randomly(clusters, cluster_id):
     return cluster_centers
 
 
-def section(clusters, cluster_id, n_clusters):
+def bisection(clusters, cluster_id, n_clusters):
     # pick a cluster to split
     cluster_centers = choose_randomly(clusters, cluster_id)
 
     # find 2-sub clusters using kmeans algorithm(bisecting step)
-    sub_clusters = bisecting(clusters, cluster_id, cluster_centers)
+    sub_clusters = section(clusters, cluster_id, cluster_centers)
 
     return cluster_centers, sub_clusters
 
@@ -55,13 +55,13 @@ def init_clusters(X):
     return clusters, cluster_ids
 
 
-def repeated_bisection(X):
+def repeated_bisection(X, n_clusters):
     # clusters<cluster_id, points>
     clusters, cluster_ids = init_clusters(X)
 
     # split an initial cluster(original data) into two clusters
     # cluster_centers<cluster_id, coordinate_cluster_center>
-    cluster_centers, clusters = section(clusters, cluster_ids[0], 2)
+    cluster_centers, clusters = bisection(clusters, cluster_ids[0], 2)
 
     return cluster_centers, clusters
 
@@ -79,7 +79,7 @@ def main():
     X = multivariate_normal.load_data()
 
     # Do repeated bisection clustering
-    cluster_centers, clusters = repeated_bisection(X)
+    cluster_centers, clusters = repeated_bisection(X, 2)
 
     # print results
     show_clusters(cluster_centers, clusters)
