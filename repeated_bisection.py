@@ -42,8 +42,8 @@ def choose_cluster(clusters, cluster_centers):
 
 
 def remove_cluster(cidx, clusters, cluster_centers):
-        del clusters[cidx]
-        del cluster_centers[cidx]
+    del clusters[cidx]
+    del cluster_centers[cidx]
 
 
 def repeated_bisection(X, n_clusters):
