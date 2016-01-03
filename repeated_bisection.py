@@ -36,9 +36,10 @@ def choose_cluster(clusters, cluster_centers):
     Return:
         a cluster including maximum size of samples
     """
-    lens = [len(clusters[idx]) for idx in clusters]
+    lens = [len(clusters[idx]) for idx in clusters.keys()]
     max_idx = np.argsort(np.array(lens))[::-1][0]
-    return max_idx, clusters[max_idx], cluster_centers[max_idx]
+    max_cidx = clusters.keys()[max_idx]
+    return max_cidx, clusters[max_cidx], cluster_centers[max_cidx]
 
 
 def remove_cluster(cidx, clusters, cluster_centers):
@@ -151,7 +152,7 @@ def show_results(clusters, cluster_centers, n_clusters):
     print '** Results'
     print 'n_clusters:', len(clusters)
     print 'centers:'
-    for i in range(n_clusters):
+    for i in cluster_centers.keys():
         print cluster_centers[i]
 
 
