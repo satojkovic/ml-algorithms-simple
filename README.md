@@ -16,3 +16,4 @@ Algorithms
 * [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression)
 * [linear regression](https://en.wikipedia.org/wiki/Linear_regression)
 * [Non negative matrix factorization](https://en.wikipedia.org/wiki/Non-negative_matrix_factorization)
+* [Repeated bisection](http://cs.fit.edu/~pkc/classes/ml-internet/papers/steinbach00tr.pdf)
