@@ -30,6 +30,10 @@ def train(X_train, y_train):
     return ([mean, var], pi)
 
 
+def fit(model, X_test):
+    pass
+
+
 def main():
     # load sample data
     X, X_labels = multivariate_normal.load_data_with_label()
@@ -46,6 +50,8 @@ def main():
     model['var'] = var
     model['pi'] = pi
 
+    # predict
+    pred = fit(model, X_test)
 
 if __name__ == '__main__':
     main()
