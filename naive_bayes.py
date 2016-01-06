@@ -4,6 +4,7 @@
 import multivariate_normal
 from sklearn.cross_validation import train_test_split
 import numpy as np
+from collections import defaultdict
 
 
 def train(X_train, y_train):
@@ -39,6 +40,12 @@ def main():
     print 'mean', mean
     print 'var', var
     print 'pi', pi
+
+    model = defaultdict(np.array)
+    model['mean'] = mean
+    model['var'] = var
+    model['pi'] = pi
+
 
 if __name__ == '__main__':
     main()
