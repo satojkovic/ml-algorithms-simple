@@ -30,8 +30,14 @@ def train(X_train, y_train):
     return ([mean, var], pi)
 
 
-def fit(model, X_test):
+def negative_log_likelihood(X, y):
     pass
+
+
+def fit(model, X_test, y_test):
+    n_labels = max(y_test) + 1
+    results = [negative_log_likelihood(X_test, y) for y in range(n_labels)]
+    return np.argmin(results)
 
 
 def main():
@@ -51,7 +57,7 @@ def main():
     model['pi'] = pi
 
     # predict
-    pred = fit(model, X_test)
+    pred = fit(model, X_test, y_test)
 
 if __name__ == '__main__':
     main()
