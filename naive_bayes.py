@@ -5,6 +5,7 @@ import multivariate_normal
 from sklearn.cross_validation import train_test_split
 import numpy as np
 from collections import defaultdict
+import scipy.stats
 
 
 def train(X_train, y_train):
@@ -27,16 +28,26 @@ def train(X_train, y_train):
     pi = np.zeros(n_labels, dtype=np.float)
     pi = N_l / N
 
-    return ([mean, var], pi)
+    return (mean, var, pi)
 
 
-def negative_log_likelihood(X, y):
-    pass
+def log_gaussian_wrap(x, mean, var):
+    epsilon = 1.0e-5
+    if var < epsilon:
+        return 0.0
+    return scipy.stats.norm(mean, var).logpdf(x)
+
+
+def negative_log_likelihood(model, X, y):
+    n_features = X.shape[1]
+    log_prior_y = -np.log(model['pi'][y])
+    log_posterior_x_given_y = -np.sum([log_gaussian_wrap(X[d], model['mean'][y][d], model['var'][y][d]) for d in range(n_features)])
+    return log_prior_y + log_posterior_x_given_y
 
 
 def fit(model, X_test, y_test):
     n_labels = max(y_test) + 1
-    results = [negative_log_likelihood(X_test, y) for y in range(n_labels)]
+    results = [negative_log_likelihood(model, X_test, y) for y in range(n_labels)]
     return np.argmin(results)
 
 
@@ -46,7 +57,7 @@ def main():
 
     # training
     X_train, X_test, y_train, y_test = train_test_split(X, X_labels)
-    [mean, var], pi = train(X_train, y_train)
+    mean, var, pi = train(X_train, y_train)
     print 'mean', mean
     print 'var', var
     print 'pi', pi
@@ -58,6 +69,7 @@ def main():
 
     # predict
     pred = fit(model, X_test, y_test)
+    print pred
 
 if __name__ == '__main__':
     main()
