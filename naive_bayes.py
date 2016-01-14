@@ -8,7 +8,7 @@ from collections import defaultdict
 import scipy.stats
 
 
-def train(X_train, y_train):
+def fit(X_train, y_train):
     n_labels = max(y_train)+1
     n_features = X_train.shape[1]
     N = X_train.shape[0]
@@ -39,16 +39,16 @@ def log_gaussian_wrap(x, mean, var):
 
 
 def negative_log_likelihood(model, X, y):
-    n_features = X.shape[1]
+    n_features = len(X)
     log_prior_y = -np.log(model['pi'][y])
     log_posterior_x_given_y = -np.sum([log_gaussian_wrap(X[d], model['mean'][y][d], model['var'][y][d]) for d in range(n_features)])
     return log_prior_y + log_posterior_x_given_y
 
 
-def fit(model, X_test, y_test):
-    n_labels = max(y_test) + 1
-    results = [negative_log_likelihood(model, X_test, y) for y in range(n_labels)]
-    return np.argmin(results)
+def predict(model, X_test, y_test):
+    results = [negative_log_likelihood(model, x, y_test[i])
+               for i, x in enumerate(X_test)]
+    return results
 
 
 def main():
@@ -57,7 +57,7 @@ def main():
 
     # training
     X_train, X_test, y_train, y_test = train_test_split(X, X_labels)
-    mean, var, pi = train(X_train, y_train)
+    mean, var, pi = fit(X_train, y_train)
     print 'mean', mean
     print 'var', var
     print 'pi', pi
@@ -68,8 +68,7 @@ def main():
     model['pi'] = pi
 
     # predict
-    pred = fit(model, X_test, y_test)
-    print pred
+    pred = predict(model, X_test, y_test)
 
 if __name__ == '__main__':
     main()
