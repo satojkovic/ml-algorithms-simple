@@ -6,29 +6,26 @@ from sklearn.cross_validation import train_test_split
 import numpy as np
 from collections import defaultdict
 import scipy.stats
+from sklearn.metrics import classification_report
 
 
 def fit(X_train, y_train):
     n_labels = max(y_train)+1
-    n_features = X_train.shape[1]
-    N = X_train.shape[0]
-    N_l = np.array([(y_train == y).sum() for y in range(n_labels)],
-                   dtype=np.float)
+    n_samples, n_features = X_train.shape
 
-    mean = np.zeros((n_labels, n_features), dtype=np.float)
-    for y in range(n_labels):
-        sum = np.sum(X_train[n] if y_train[n] == y else 0.0 for n in range(N))
-        mean[y] = sum / N_l[y]
+    classes = np.unique(y_train)
+    n_classes = classes.shape[0]
 
-    var = np.zeros((n_labels, n_features), dtype=np.float)
-    for y in range(n_labels):
-        sum = np.sum((X_train[n] - mean[y])**2 if y_train[n] == y else 0.0 for n in range(N))
-        var[y] = sum / N_l[y]
-
-    pi = np.zeros(n_labels, dtype=np.float)
-    pi = N_l / N
-
-    return (mean, var, pi)
+    theta = np.zeros((n_classes, n_features))
+    sigma = np.zeros((n_classes, n_features))
+    class_prior = np.zeros(n_classes)
+    epsilon = 1e-9
+    for i, yi in enumerate(classes):
+        Xi = X_train[y_train == yi, :]
+        theta[i, :] = np.mean(Xi, axis=0)
+        sigma[i, :] = np.var(Xi, axis=0) + epsilon
+        class_prior[i] = np.float(Xi.shape[0]) / n_samples
+    return theta, sigma
 
 
 def log_gaussian_wrap(x, mean, var):
@@ -57,15 +54,13 @@ def main():
 
     # training
     X_train, X_test, y_train, y_test = train_test_split(X, X_labels)
-    mean, var, pi = fit(X_train, y_train)
+    mean, var = fit(X_train, y_train)
     print 'mean', mean
     print 'var', var
-    print 'pi', pi
 
     model = defaultdict(np.array)
     model['mean'] = mean
     model['var'] = var
-    model['pi'] = pi
 
     # predict
     pred = predict(model, X_test, y_test)
