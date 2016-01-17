@@ -25,27 +25,21 @@ def fit(X_train, y_train):
         theta[i, :] = np.mean(Xi, axis=0)
         sigma[i, :] = np.var(Xi, axis=0) + epsilon
         class_prior[i] = np.float(Xi.shape[0]) / n_samples
-    return theta, sigma
-
-
-def log_gaussian_wrap(x, mean, var):
-    epsilon = 1.0e-5
-    if var < epsilon:
-        return 0.0
-    return scipy.stats.norm(mean, var).logpdf(x)
-
-
-def negative_log_likelihood(model, X, y):
-    n_features = len(X)
-    log_prior_y = -np.log(model['pi'][y])
-    log_posterior_x_given_y = -np.sum([log_gaussian_wrap(X[d], model['mean'][y][d], model['var'][y][d]) for d in range(n_features)])
-    return log_prior_y + log_posterior_x_given_y
+    return theta, sigma, class_prior
 
 
 def predict(model, X_test, y_test):
-    results = [negative_log_likelihood(model, x, y_test[i])
-               for i, x in enumerate(X_test)]
-    return results
+    classes = np.unique(y_test)
+    n_classes = classes.shape[0]
+    joint_log_likelihood = []
+    for i in range(n_classes):
+        jointi = np.log(model['class_prior'][i])
+        n_ij = - 0.5 * np.sum(np.log(2. * np.pi * model['var'][i, :]))
+        n_ij -= 0.5 * np.sum(((X_test - model['mean'][i, :]) ** 2) /
+                             (model['var'][i, :]), 1)
+        joint_log_likelihood.append(jointi + n_ij)
+    joint_log_likelihood = np.array(joint_log_likelihood).T
+    return classes[np.argmax(joint_log_likelihood, axis=1)]
 
 
 def main():
@@ -54,16 +48,23 @@ def main():
 
     # training
     X_train, X_test, y_train, y_test = train_test_split(X, X_labels)
-    mean, var = fit(X_train, y_train)
+    mean, var, class_prior = fit(X_train, y_train)
     print 'mean', mean
     print 'var', var
 
     model = defaultdict(np.array)
     model['mean'] = mean
     model['var'] = var
+    model['class_prior'] = class_prior
 
     # predict
     pred = predict(model, X_test, y_test)
+
+    # print result
+    X_labels_uniq = map(np.str, np.unique(X_labels))
+    print classification_report(y_test, pred,
+                                target_names=X_labels_uniq)
+
 
 if __name__ == '__main__':
     main()
