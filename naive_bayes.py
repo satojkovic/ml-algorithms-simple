@@ -39,7 +39,7 @@ def predict(model, X_test, y_test):
                              (model['var'][i, :]), 1)
         joint_log_likelihood.append(jointi + n_ij)
     joint_log_likelihood = np.array(joint_log_likelihood).T
-    return classes[np.argmax(joint_log_likelihood, axis=1)]
+    return classes[np.argmin(joint_log_likelihood, axis=1)]
 
 
 def main():
