@@ -5,12 +5,10 @@ import multivariate_normal
 from sklearn.cross_validation import train_test_split
 import numpy as np
 from collections import defaultdict
-import scipy.stats
 from sklearn.metrics import classification_report
 
 
 def fit(X_train, y_train):
-    n_labels = max(y_train)+1
     n_samples, n_features = X_train.shape
 
     classes = np.unique(y_train)
