@@ -20,11 +20,18 @@ def main():
     print classification_report(y_test, pred,
                                 target_names=X_labels_uniq)
 
-    # plot test data
-    colors = ['r', 'b']
-    for i in range(2):
-        x, y = X_test[y_test == i, 0], X_test[y_test == i, 1]
-        plt.scatter(x, y, color=colors[i], marker='x')
+    # plot decision boundary with meshgrid
+    h = 0.1
+    x_min, x_max = X_train[:, 0].min() - 1, X_train[:, 0].max() + 1
+    y_min, y_max = X_train[:, 1].min() - 1, X_train[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                         np.arange(y_min, y_max, h))
+    Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    plt.contourf(xx, yy, Z, cmap=plt.cm.Paired, alpha=0.8)
+
+    # plot also the training points
+    plt.scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=plt.cm.Paired)
     plt.show()
 
 if __name__ == '__main__':
