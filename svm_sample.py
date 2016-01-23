@@ -32,6 +32,8 @@ def main():
 
     # plot also the training points
     plt.scatter(X_train[:, 0], X_train[:, 1], c=y_train, cmap=plt.cm.Paired)
+    plt.xlim(x_min, x_max)
+    plt.ylim(y_min, y_max)
     plt.show()
 
 if __name__ == '__main__':
