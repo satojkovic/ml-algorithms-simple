@@ -24,7 +24,6 @@ def fit(X_train, y_train, learning_rate=0.02, max_iter=500):
             L[i] = L[i] + learning_rate * dL(L, i, n_samples, X_train, y_train)
             L[i] = max(L[i], 0)
         iter += 1
-        print iter
 
     model = defaultdict(np.array)
     model['L'] = L
