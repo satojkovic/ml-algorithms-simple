@@ -9,8 +9,7 @@ from collections import defaultdict
 
 def dL(L, i, n_samples, X_train, y_train):
     res = 0
-    for j in range(n_samples):
-        res += L[j] * y_train[i] * y_train[j] * np.dot(X_train[i], X_train[j])
+    res = np.sum([L[j] * y_train[i] * y_train[j] * np.dot(X_train[i], X_train[j]) for j in range(n_samples)])
     return (1 - res)
 
 
