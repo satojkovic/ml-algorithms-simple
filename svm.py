@@ -5,6 +5,11 @@ import numpy as np
 import multivariate_normal
 from sklearn.cross_validation import train_test_split
 from collections import defaultdict
+from sklearn.metrics import classification_report
+
+
+def predict(model, X_test, y_test):
+    pass
 
 
 def dL(L, i, n_samples, X_train, y_train):
@@ -45,6 +50,9 @@ def main():
     # training
     model = fit(X_train, y_train)
     print model
+
+    # predict
+    pred = predict(model, X_test, y_test)
 
 
 if __name__ == '__main__':
