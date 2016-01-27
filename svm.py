@@ -29,8 +29,18 @@ def fit(X_train, y_train, learning_rate=0.02, max_iter=500):
             L[i] = max(L[i], 0)
         iter += 1
 
+    S = [i for i in range(len(L)) if L[i] >= 0.00001]
+    w = np.zeros(n_features+1)
+    for n in S:
+        w += L[i] * y_train[i] * X_train[i]
+    b = w[2]
+    np.delete(w, 2, 0)
+
     model = defaultdict(np.array)
     model['L'] = L
+    model['w'] = w
+    model['b'] = b
+
     return model
 
 
