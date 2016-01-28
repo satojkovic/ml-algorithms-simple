@@ -8,19 +8,15 @@ from collections import defaultdict
 from sklearn.metrics import classification_report
 
 
-def predict(model, X_test, y_test):
-    pass
-
-
 def dL(L, i, n_samples, X_train, y_train):
     res = 0
     res = np.sum([L[j] * y_train[i] * y_train[j] * np.dot(X_train[i], X_train[j]) for j in range(n_samples)])
     return (1 - res)
 
 
-def fit(X_train, y_train, learning_rate=0.02, max_iter=500):
-    n_samples, n_features = X_train.shape
-    L = np.zeros((n_samples, 1))
+def fit(X_train, y_train, learning_rate=0.02, max_iter=3):
+    n_samples, n_features_b = X_train.shape
+    L = np.zeros(n_samples)
 
     iter = 0
     while iter < max_iter:
@@ -30,9 +26,9 @@ def fit(X_train, y_train, learning_rate=0.02, max_iter=500):
         iter += 1
 
     S = [i for i in range(len(L)) if L[i] >= 0.00001]
-    w = np.zeros(n_features+1)
+    w = np.zeros(n_features_b)
     for n in S:
-        w += L[i] * y_train[i] * X_train[i]
+        w += L[n] * y_train[n] * np.array(X_train[n])
     b = w[2]
     np.delete(w, 2, 0)
 
