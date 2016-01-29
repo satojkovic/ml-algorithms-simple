@@ -15,7 +15,9 @@ def dL(L, i, n_samples, X_train, y_train):
 
 
 def fit(X_train, y_train, learning_rate=0.02, max_iter=3):
-    n_samples, n_features_b = X_train.shape
+    n_samples = X_train.shape[0]
+    X_train = np.c_[X_train, np.ones(n_samples)]
+    n_features = X_train.shape[1]
     L = np.zeros(n_samples)
 
     iter = 0
@@ -26,7 +28,7 @@ def fit(X_train, y_train, learning_rate=0.02, max_iter=3):
         iter += 1
 
     S = [i for i in range(len(L)) if L[i] >= 0.00001]
-    w = np.zeros(n_features_b)
+    w = np.zeros(n_features)
     for n in S:
         w += L[n] * y_train[n] * np.array(X_train[n])
     b = w[2]
@@ -49,8 +51,6 @@ def main():
     X, X_labels = multivariate_normal.load_data_with_label()
 
     # input data
-    n_samples, n_features = X.shape
-    X = np.c_[X, np.ones(n_samples)]
     X_train, X_test, y_train, y_test = train_test_split(X, X_labels)
 
     # training
