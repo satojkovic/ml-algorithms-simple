@@ -6,6 +6,7 @@ import multivariate_normal
 from sklearn.cross_validation import train_test_split
 from collections import defaultdict
 from sklearn.metrics import classification_report
+import matplotlib.pyplot as plt
 
 
 def dL(L, i, n_samples, X_train, y_train):
@@ -14,7 +15,7 @@ def dL(L, i, n_samples, X_train, y_train):
     return (1 - res)
 
 
-def fit(X_train, y_train, learning_rate=0.02, max_iter=3):
+def fit(X_train, y_train, learning_rate=0.02, max_iter=50):
     n_samples = X_train.shape[0]
     X_train = np.c_[X_train, np.ones(n_samples)]
     n_features = X_train.shape[1]
@@ -42,8 +43,21 @@ def fit(X_train, y_train, learning_rate=0.02, max_iter=3):
     return model
 
 
-def predict(model, X_test, y_test):
-    pass
+def show_boundary(model, X_train, y_train):
+    for i, xt in enumerate(X_train):
+        if y_train[i] == 0:
+            plt.plot(xt[0], xt[1], 'rx')
+        else:
+            plt.plot(xt[0], xt[1], 'bx')
+    
+    x1_min, x1_max = min(X_train[:, 0]) - 1, max(X_train[:, 0]) + 1
+    x2_min, x2_max = min(X_train[:, 1]) - 1, max(X_train[:, 1]) + 1
+    x1 = np.linspace(x1_min, x1_max, 100)
+    x2 = [- (model['w'][0] / model['w'][1]) * x - (model['b'] / model['w'][1]) for x in x1]
+    plt.plot(x1, x2, 'g-')
+    plt.xlim(x1_min, x1_max)
+    plt.ylim(x2_min, x2_max)
+    plt.show()
 
 
 def main():
@@ -55,10 +69,9 @@ def main():
 
     # training
     model = fit(X_train, y_train)
-    print model
 
-    # predict
-    pred = predict(model, X_test, y_test)
+    # show boundary
+    show_boundary(model, X_train, y_train)
 
 
 if __name__ == '__main__':
