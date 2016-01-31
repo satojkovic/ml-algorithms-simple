@@ -56,7 +56,7 @@ def predict(model, X):
 
 def show_boundary(model, X_train, y_train):
     for i, xt in enumerate(X_train):
-        if y_train[i] == 0:
+        if y_train[i] != 0:
             plt.plot(xt[0], xt[1], 'rx')
         else:
             plt.plot(xt[0], xt[1], 'bx')
@@ -82,6 +82,7 @@ def show_boundary(model, X_train, y_train):
 def main():
     # load sample data
     X, X_labels = multivariate_normal.load_data_with_label()
+    X_labels[X_labels == 0] = -1
 
     # input data
     X_train, X_test, y_train, y_test = train_test_split(X, X_labels)
