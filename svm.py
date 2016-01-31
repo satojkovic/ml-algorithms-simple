@@ -43,6 +43,17 @@ def fit(X_train, y_train, learning_rate=0.02, max_iter=50):
     return model
 
 
+def predict(model, X):
+    z = np.zeros(len(X), dtype=np.int)
+    pred = model['w'][0] * X[:, 0] + model['w'][1] * X[:, 1] + model['b']
+    for i, p in enumerate(pred):
+        if p > 0.0:
+            z[i] = 0
+        else:
+            z[i] = 1
+    return z
+
+
 def show_boundary(model, X_train, y_train):
     for i, xt in enumerate(X_train):
         if y_train[i] == 0:
