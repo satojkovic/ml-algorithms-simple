@@ -68,6 +68,14 @@ def show_boundary(model, X_train, y_train):
     plt.plot(x1, x2, 'g-')
     plt.xlim(x1_min, x1_max)
     plt.ylim(x2_min, x2_max)
+
+    h = 0.1
+    xx, yy = np.meshgrid(np.arange(x1_min, x1_max, h),
+                         np.arange(x2_min, x2_max, h))
+    z = predict(model, np.c_[xx.ravel(), yy.ravel()])
+    z = z.reshape(xx.shape)
+    plt.contourf(xx, yy, z, cmap=plt.cm.Paired, alpha=0.8)
+
     plt.show()
 
 
