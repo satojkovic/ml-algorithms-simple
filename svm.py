@@ -24,14 +24,19 @@ def fit(X_train, y_train, learning_rate=0.02, max_iter=50):
     iter = 0
     while iter < max_iter:
         for i in range(n_samples):
-            L[i] = L[i] + learning_rate * dL(L, i, n_samples, X_train, y_train)
+            sum =  np.sum([y_train[i] * L[j] * y_train[j]
+                           * np.dot(X_train[i], X_train[j])
+                           for j in range(n_samples)])
+            L[i] = L[i] + learning_rate * (1 - sum)
             L[i] = max(L[i], 0)
         iter += 1
 
-    S = [i for i in range(len(L)) if L[i] >= 0.00001]
+    # calc weight
     w = np.zeros(n_features)
-    for n in S:
-        w += L[n] * y_train[n] * np.array(X_train[n])
+    for i in range(n_samples):
+        w += L[i] * y_train[i] * np.array(X_train[i])
+
+    # calc bias term
     b = w[2]
     np.delete(w, 2, 0)
 
@@ -56,7 +61,7 @@ def predict(model, X):
 
 def show_boundary(model, X_train, y_train):
     for i, xt in enumerate(X_train):
-        if y_train[i] != 0:
+        if y_train[i] != 1:
             plt.plot(xt[0], xt[1], 'rx')
         else:
             plt.plot(xt[0], xt[1], 'bx')
