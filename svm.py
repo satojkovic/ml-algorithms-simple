@@ -37,8 +37,14 @@ def fit(X_train, y_train, learning_rate=0.02, max_iter=50):
         w += L[i] * y_train[i] * np.array(X_train[i])
 
     # calc bias term
-    b = w[2]
-    np.delete(w, 2, 0)
+    S = []
+    for i in range(n_samples):
+        if L[i] <= 0: continue
+        S.append(i)
+    sidx = np.random.choice(S)
+    b = y_train[sidx] - np.dot(w.T, X_train[sidx])
+
+    plt.plot(X_train[sidx][0], X_train[sidx][1], 'go')
 
     model = defaultdict(np.array)
     model['L'] = L
