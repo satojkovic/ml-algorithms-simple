@@ -9,13 +9,7 @@ from sklearn.metrics import classification_report
 import matplotlib.pyplot as plt
 
 
-def dL(L, i, n_samples, X_train, y_train):
-    res = 0
-    res = np.sum([L[j] * y_train[i] * y_train[j] * np.dot(X_train[i], X_train[j]) for j in range(n_samples)])
-    return (1 - res)
-
-
-def fit(X_train, y_train, learning_rate=0.02, max_iter=50):
+def fit(X_train, y_train, learning_rate=0.02, max_iter=100):
     n_samples = X_train.shape[0]
     X_train = np.c_[X_train, np.ones(n_samples)]
     n_features = X_train.shape[1]
@@ -24,7 +18,7 @@ def fit(X_train, y_train, learning_rate=0.02, max_iter=50):
     iter = 0
     while iter < max_iter:
         for i in range(n_samples):
-            sum =  np.sum([y_train[i] * L[j] * y_train[j]
+            sum =  np.sum([L[j] * y_train[i] * y_train[j]
                            * np.dot(X_train[i], X_train[j])
                            for j in range(n_samples)])
             L[i] = L[i] + learning_rate * (1 - sum)
@@ -36,15 +30,17 @@ def fit(X_train, y_train, learning_rate=0.02, max_iter=50):
     for i in range(n_samples):
         w += L[i] * y_train[i] * np.array(X_train[i])
 
-    # calc bias term
-    S = []
+    # choose support vector
+    sv = []
     for i in range(n_samples):
         if L[i] <= 0: continue
-        S.append(i)
-    sidx = np.random.choice(S)
-    b = y_train[sidx] - np.dot(w.T, X_train[sidx])
+        sv.append(i)
+    svidx = np.random.choice(sv)
 
-    plt.plot(X_train[sidx][0], X_train[sidx][1], 'go')
+    # calc bias term
+    b = y_train[svidx] - np.dot(w.T, X_train[svidx])
+
+    plt.plot(X_train[svidx][0], X_train[svidx][1], 'go')
 
     model = defaultdict(np.array)
     model['L'] = L
@@ -59,7 +55,7 @@ def predict(model, X):
     pred = model['w'][0] * X[:, 0] + model['w'][1] * X[:, 1] + model['b']
     for i, p in enumerate(pred):
         if p > 0.0:
-            z[i] = 0
+            z[i] = -1
         else:
             z[i] = 1
     return z
