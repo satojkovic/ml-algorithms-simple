@@ -4,8 +4,8 @@
 import numpy as np
 
 
-N1 = 1000
-N2 = 1000
+N1 = 100
+N2 = 100
 
 
 def standardization(X):
