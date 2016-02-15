@@ -3,6 +3,7 @@
 
 import numpy as np
 from collections import defaultdict
+from math import log
 
 
 class decisionnode:
@@ -50,9 +51,23 @@ def giniimpurity(rows):
     return imp
 
 
+def entropy(rows):
+    log2 = lambda x: log(x) / log(2)
+    results = uniquecounts(rows)
+
+    ent = 0.0
+    for r in results.keys():
+        p = float(results[r]) / len(rows)
+        ent = ent - p * log2(p)
+    return ent
+
+
 def main():
     my_data = np.loadtxt('decision_tree_example.txt', dtype=np.str)
     print divideset(my_data.tolist(), 2, 'yes')
+
+    print giniimpurity(my_data.tolist())
+    print entropy(my_data.tolist())
 
 if __name__ == '__main__':
     main()
