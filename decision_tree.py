@@ -62,6 +62,10 @@ def entropy(rows):
     return ent
 
 
+def buildtree(rows, scoref=entropy):
+    pass
+
+
 def main():
     my_data = np.loadtxt('decision_tree_example.txt', dtype=np.str)
     print divideset(my_data.tolist(), 2, 'yes')
