@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-from collections import defaultdict
 from math import log
 
 
@@ -31,9 +30,11 @@ def divideset(rows, column, value):
 
 
 def uniquecounts(rows):
-    results = defaultdict(int)
+    results = {}
     for row in rows:
         r = row[len(row) - 1]
+        if r not in results:
+            results[r] = 0
         results[r] += 1
     return results
 
@@ -73,7 +74,7 @@ def buildtree(rows, scoref=entropy):
 
     column_count = len(rows[0]) - 1
     for col in range(column_count):
-        column_values = defaultdict(int)
+        column_values = {}
         for row in rows:
             column_values[row[col]] = 1
         for value in column_values.keys():
@@ -95,12 +96,23 @@ def buildtree(rows, scoref=entropy):
             return decisionnode(results=uniquecounts(rows))
 
 
+def printtree(tree, indent=''):
+    if tree.results is not None:
+        print str(tree.results)
+    else:
+        print str(tree.col) + ':' + str(tree.value) + '?'
+        print indent + 'T->'
+        printtree(tree.tb, indent + ' ')
+        print indent + 'F->'
+        printtree(tree.fb, indent + ' ')
+
+
 def main():
     my_data = np.loadtxt('decision_tree_example.txt', dtype=np.str)
     print divideset(my_data.tolist(), 2, 'yes')
 
-    print giniimpurity(my_data.tolist())
-    print entropy(my_data.tolist())
+    tree = buildtree(my_data.tolist())
+    printtree(tree)
 
 if __name__ == '__main__':
     main()
