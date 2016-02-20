@@ -3,6 +3,7 @@
 
 import numpy as np
 from math import log
+from collections import defaultdict
 
 
 class decisionnode:
@@ -74,9 +75,9 @@ def buildtree(rows, scoref=entropy):
 
     column_count = len(rows[0]) - 1
     for col in range(column_count):
-        column_values = {}
+        column_values = defaultdict(int)
         for row in rows:
-            column_values[row[col]] = 1
+            column_values[row[col]] += 1
         for value in column_values.keys():
             (set1, set2) = divideset(rows, col, value)
 
@@ -86,31 +87,29 @@ def buildtree(rows, scoref=entropy):
                 best_gain = gain
                 best_criteria = (col, value)
                 best_sets = (set1, set2)
-        if best_gain > 0:
-            trueBranch = buildtree(best_sets[0])
-            falseBranch = buildtree(best_sets[1])
-            return decisionnode(col=best_criteria[0],
-                                value=best_criteria[1],
-                                tb=trueBranch, fb=falseBranch)
-        else:
-            return decisionnode(results=uniquecounts(rows))
+    if best_gain > 0:
+        trueBranch = buildtree(best_sets[0])
+        falseBranch = buildtree(best_sets[1])
+        return decisionnode(col=best_criteria[0],
+                            value=best_criteria[1],
+                            tb=trueBranch, fb=falseBranch)
+    else:
+        return decisionnode(results=uniquecounts(rows))
 
 
 def printtree(tree, indent=''):
     if tree.results is not None:
         print str(tree.results)
     else:
-        print str(tree.col) + ':' + str(tree.value) + '?'
-        print indent + 'T->'
+        print str(tree.col) + ':' + str(tree.value) + '? '
+        print indent + 'T->',
         printtree(tree.tb, indent + ' ')
-        print indent + 'F->'
+        print indent + 'F->',
         printtree(tree.fb, indent + ' ')
 
 
 def main():
-    my_data = np.loadtxt('decision_tree_example.txt', dtype=np.str)
-    print divideset(my_data.tolist(), 2, 'yes')
-
+    my_data = np.genfromtxt('decision_tree_example.txt', dtype=None)
     tree = buildtree(my_data.tolist())
     printtree(tree)
 
