@@ -4,6 +4,7 @@
 import numpy as np
 from math import log
 from collections import defaultdict
+from PIL import Image, ImageDraw
 
 
 class decisionnode:
@@ -108,10 +109,58 @@ def printtree(tree, indent=''):
         printtree(tree.fb, indent + ' ')
 
 
+def getwidth(tree):
+    if tree.tb is None and tree.fb is None:
+        return 1
+    else:
+        return getwidth(tree.tb) + getwidth(tree.fb)
+
+
+def getdepth(tree):
+    if tree.tb is None and tree.fb is None:
+        return 0
+    else:
+        return max(getdepth(tree.tb), getdepth(tree.fb)) + 1
+
+
+def drawnode(draw, tree, x, y):
+    if tree.results is None:
+        w1 = getwidth(tree.fb) * 100
+        w2 = getwidth(tree.tb) * 100
+
+        left = x - (w1 + w2) / 2
+        right = x + (w1 + w2) / 2
+
+        draw.text((x-20, y-10), str(tree.col) + ':' + str(tree.value), (0, 0, 0))
+
+        draw.line((x, y, left + w1/2, y + 100), fill=(255, 0, 0))
+        draw.line((x, y, right - w2/2, y + 100), fill=(255, 0, 0))
+
+        drawnode(draw, tree.fb, left + w1/2, y + 100)
+        drawnode(draw, tree.tb, right - w2/2, y + 100)
+
+    else:
+        txt = ' \n'.join(['%s:%d' % v for v in tree.results.items()])
+        draw.text((x-20, y), txt, (0, 0, 0))
+
+
+def drawtree(tree, jpeg='tree.jpg'):
+    w = getwidth(tree) * 100
+    h = getdepth(tree) * 100 + 120
+
+    img = Image.new('RGB', (w, h), (255, 255, 255))
+    draw = ImageDraw.Draw(img)
+
+    drawnode(draw, tree, w/2, 20)
+    img.save(jpeg, 'JPEG')
+
+
 def main():
     my_data = np.genfromtxt('decision_tree_example.txt', dtype=None)
     tree = buildtree(my_data.tolist())
     printtree(tree)
+
+    drawtree(tree, jpeg='treeview.jpg')
 
 if __name__ == '__main__':
     main()
