@@ -48,7 +48,8 @@ def giniimpurity(rows):
     for k1 in counts:
         p1 = float(counts[k1]) / total
         for k2 in counts:
-            if k1 == k2: continue
+            if k1 == k2:
+                continue
             p2 = float(counts[k2]) / total
             imp += p1 * p2
     return imp
@@ -131,7 +132,9 @@ def drawnode(draw, tree, x, y):
         left = x - (w1 + w2) / 2
         right = x + (w1 + w2) / 2
 
-        draw.text((x-20, y-10), str(tree.col) + ':' + str(tree.value), (0, 0, 0))
+        draw.text((x-20, y-10),
+                  str(tree.col) + ':' + str(tree.value),
+                  (0, 0, 0))
 
         draw.line((x, y, left + w1/2, y + 100), fill=(255, 0, 0))
         draw.line((x, y, right - w2/2, y + 100), fill=(255, 0, 0))
