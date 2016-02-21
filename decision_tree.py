@@ -158,12 +158,33 @@ def drawtree(tree, jpeg='tree.jpg'):
     img.save(jpeg, 'JPEG')
 
 
+def classify(observation, tree):
+    if tree.results is not None:
+        return tree.results
+    else:
+        v = observation[tree.col]
+        branch = None
+        if isinstance(v, int) or isinstance(v, float):
+            if v >= tree.value:
+                branch = tree.tb
+            else:
+                branch = tree.fb
+        else:
+            if v == tree.value:
+                branch = tree.tb
+            else:
+                branch = tree.fb
+        return classify(observation, branch)
+
+
 def main():
     my_data = np.genfromtxt('decision_tree_example.txt', dtype=None)
     tree = buildtree(my_data.tolist())
     printtree(tree)
 
     drawtree(tree, jpeg='treeview.jpg')
+
+    print classify(['(direct)', 'USA', 'yes', 5], tree)
 
 if __name__ == '__main__':
     main()
