@@ -177,14 +177,36 @@ def classify(observation, tree):
         return classify(observation, branch)
 
 
+def prune(tree, mingain):
+    if tree.tb.results is None:
+        prune(tree.tb, mingain)
+    if tree.fb.results is None:
+        prune(tree.fb, mingain)
+
+    if tree.tb.results is not None and tree.fb.results is not None:
+        tb, fb = [], []
+        for v, c in tree.tb.results.items():
+            tb += [[v]] * c
+        for v, c in tree.fb.results.items():
+            fb += [[v]] * c
+
+        delta = entropy(tb + fb) - (entropy(tb) + entropy(fb)) / 2
+        if delta < mingain:
+            tree.tb, tree.fb = None, None
+            tree.results = uniquecounts(tb + fb)
+
+
 def main():
     my_data = np.genfromtxt('decision_tree_example.txt', dtype=None)
     tree = buildtree(my_data.tolist())
     printtree(tree)
-
     drawtree(tree, jpeg='treeview.jpg')
 
-    print classify(['(direct)', 'USA', 'yes', 5], tree)
+    print '\n', classify(['(direct)', 'USA', 'yes', 5], tree)
+
+    prune(tree, 1.0)
+    print '\n',
+    printtree(tree)
 
 if __name__ == '__main__':
     main()
