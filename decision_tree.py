@@ -203,8 +203,8 @@ def mdclassify(observation, tree):
         if v is None:
             tr = mdclassify(observation, tree.tb)
             fr = mdclassify(observation, tree.fb)
-            tcount = sum(tr.values)
-            fcount = sum(fr.values)
+            tcount = sum(tr.values())
+            fcount = sum(fr.values())
             tw = float(tcount) / (tcount + fcount)
             fw = float(fcount) / (tcount + fcount)
             result = {}
