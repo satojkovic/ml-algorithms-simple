@@ -195,6 +195,39 @@ def prune(tree, mingain):
             tree.tb, tree.fb = None, None
             tree.results = uniquecounts(tb + fb)
 
+def mdclassify(observation, tree):
+    if tree.results is not None:
+        return tree.results
+    else:
+        v = observation[tree.col]
+        if v is None:
+            tr = mdclassify(observation, tree.tb)
+            fr = mdclassify(observation, tree.fb)
+            tcount = sum(tr.values())
+            fcount = sum(fr.values())
+            tw = float(tcount) / (tcount + fcount)
+            fw = float(fcount) / (tcount + fcount)
+            result = {}
+            for k, v in tr.items():
+                result[k] = v * tw
+            for k, v in fr.items():
+                if k not in result:
+                    result[k] = 0
+                result[k] += v * fw
+            return result
+        else:
+            if isinstance(v, int) or isinstance(v, float):
+                if v >= tree.value:
+                    branch = tree.tb
+                else:
+                    branch = tree.fb
+            else:
+                if v == tree.value:
+                    branch = tree.tb
+                else:
+                    branch = tree.fb
+            return mdclassify(observation, branch)
+
 
 def main():
     my_data = np.genfromtxt('decision_tree_example.txt', dtype=None)
@@ -207,6 +240,8 @@ def main():
     prune(tree, 1.0)
     print '\n',
     printtree(tree)
+
+    print mdclassify(['google', None, 'yes', None], tree)
 
 if __name__ == '__main__':
     main()
