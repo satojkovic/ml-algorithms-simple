@@ -16,5 +16,13 @@ class DecisionTreeTest(unittest.TestCase):
         results = decision_tree.uniquecounts(self.rows)
         self.assertEqual(len(results), 3)
 
+    def test_giniimpurity(self):
+        results = decision_tree.giniimpurity(self.rows)
+        self.assertGreaterEqual(results, 0.0)
+
+    def test_entropy(self):
+        results = decision_tree.entropy(self.rows)
+        self.assertGreaterEqual(results, 0.0)
+
 if __name__ == '__main__':
     unittest.main()
