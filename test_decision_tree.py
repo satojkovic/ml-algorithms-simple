@@ -11,6 +11,7 @@ class DecisionTreeTest(unittest.TestCase):
     def setUp(self):
         my_data = np.genfromtxt('decision_tree_example.txt', dtype=None)
         self.rows = my_data.tolist()
+        self.tree = decision_tree.buildtree(self.rows)
 
     def test_uniquecounts(self):
         results = decision_tree.uniquecounts(self.rows)
@@ -23,6 +24,14 @@ class DecisionTreeTest(unittest.TestCase):
     def test_entropy(self):
         results = decision_tree.entropy(self.rows)
         self.assertGreaterEqual(results, 0.0)
+
+    def test_getwidth(self):
+        results = decision_tree.getwidth(self.tree)
+        self.assertEqual(results, 7)
+
+    def test_getdepth(self):
+        results = decision_tree.getdepth(self.tree)
+        self.assertEqual(results, 4)
 
 if __name__ == '__main__':
     unittest.main()
