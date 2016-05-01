@@ -36,6 +36,12 @@ def to_words(raw_review):
     return ' '.join(meaningful_words)
 
 
+def print_tfidf(tfidf, res):
+    feature_names = tfidf.get_feature_names()
+    for col in res.nonzero()[1]:
+        print feature_names[col], '-', res[0, col]
+
+
 def main():
     for subdir, dirs, files in os.walk(PATH):
         for file in files:
