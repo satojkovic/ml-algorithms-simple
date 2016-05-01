@@ -9,7 +9,7 @@ from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.stem.porter import PorterStemmer
 
-PATH = 'shakes_dir'
+PATH = 'tfidf_dir'
 token_dict = {}
 stemmer = PorterStemmer()
 
@@ -52,6 +52,13 @@ def main():
 
     tfidf = TfidfVectorizer(tokenizer=tokenize)
     tfs = tfidf.fit_transform(token_dict.values())
+
+    str = 'this sentence has unseen text such as computer but also king  lord lord  this this and that lord juliet'#teststring
+    response = tfidf.transform([str])
+
+    feature_names = tfidf.get_feature_names()
+    for col in response.nonzero()[1]:
+        print feature_names[col], ' - ', response[0, col]
 
 if __name__ == '__main__':
     main()
