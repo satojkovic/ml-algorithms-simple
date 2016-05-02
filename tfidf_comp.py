@@ -3,6 +3,7 @@
 
 from collections import Counter
 import math
+from nltk.corpus import stopwords
 
 data = ["Human machine interface for ABC computer applications",
         "A survey of user opinion of computer system response time",
@@ -27,10 +28,28 @@ def sk_tfidf(word, blob, bloblist):
     return sk_tf(word, blob) * (1 + sk_idf(word, bloblist))
 
 
+def nltk_stopwords(fileids='english'):
+    return stopwords.words(fileids)
+
+
+def preprocessing(data):
+    processed_data = []
+
+    # english stop words
+    stop_words = nltk_stopwords('english')
+    # to lowercase
+    lower_data = [d.lower() for d in data]
+    # remove stopwords
+    for ldata in lower_data:
+        processed_data.append(' '.join([lw for lw in ldata.split()
+                                        if lw not in stop_words]))
+    return processed_data
+
+
 def main():
-    bloblist = data
+    bloblist = preprocessing(data)
     for i, blob in enumerate(bloblist):
-        print 'Top words in document {}'.format(i + 1)
+        print 'TF-IDF in document {}'.format(i + 1)
         scores = {word: sk_tfidf(word, blob, bloblist)
                   for word in blob.split()}
         sorted_words = sorted(scores.items(), key=lambda x: x[1], reverse=True)
