@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from collections import Counter
+from collections import Counter, defaultdict
 import math
 from nltk.corpus import stopwords
+import numpy as np
 
 data = ["Human machine interface for ABC computer applications",
         "A survey of user opinion of computer system response time",
@@ -46,13 +47,22 @@ def preprocessing(data):
     return processed_data
 
 
+def normalize(scores):
+    scores_norm = defaultdict(float)
+    norm = np.linalg.norm(scores.values())
+    for key in scores.keys():
+        scores_norm[key] = scores[key] / norm
+    return scores_norm
+
+
 def main():
     bloblist = preprocessing(data)
     for i, blob in enumerate(bloblist):
         print 'TF-IDF in document {}'.format(i + 1)
         scores = {word: sk_tfidf(word, blob, bloblist)
                   for word in blob.split()}
-        sorted_words = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+        scores_norm = normalize(scores)
+        sorted_words = sorted(scores_norm.items(), key=lambda x: x[1], reverse=True)
         for word, score in sorted_words:
             print '\tWord: {}, TF-IDF: {}'.format(word, round(score, 5))
 
