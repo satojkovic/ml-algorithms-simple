@@ -21,7 +21,7 @@ def sk_n_containing(word, bloblist):
 
 
 def sk_idf(word, bloblist):
-    return math.log((len(bloblist) + 1) / (1 + sk_n_containing(word, bloblist)))
+    return math.log((len(bloblist) + 1.) / (1. + sk_n_containing(word, bloblist)))
 
 
 def sk_tfidf(word, blob, bloblist):
