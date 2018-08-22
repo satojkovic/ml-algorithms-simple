@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
 import numpy as np
@@ -19,7 +20,7 @@ class MLP(object):
         inputs = self.__add_bias(inputs, axis=1)
         targets = np.array(targets)
 
-        for loop_cnt in xrange(epochs):
+        for loop_cnt in range(epochs):
             # randomise the order of the inputs
             p = np.random.randint(inputs.shape[0])
             xp = inputs[p]
@@ -63,9 +64,9 @@ class MLP(object):
         return (u * (1 - u))
 
     def print_configuration(self):
-        print '--- NN configuration ---'
-        print 'Num of input layer units: %d' % self.nin
-        print 'Num of hidden layer units: %d' % self.nhid
-        print 'Num of output layer units: %d' % self.nout
-        print 'Shape of first layer weight(v):', self.v.shape
-        print 'Shape of second layer weight(w):', self.w.shape
+        print('--- NN configuration ---')
+        print('Num of input layer units: %d' % self.nin)
+        print('Num of hidden layer units: %d' % self.nhid)
+        print('Num of output layer units: %d' % self.nout)
+        print('Shape of first layer weight(v):', self.v.shape)
+        print('Shape of second layer weight(w):', self.w.shape)

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
 import numpy as np
@@ -14,16 +15,16 @@ def main():
 
     # training
     mlp.fit(inputs, targets)
-    print '--- training ---'
-    print 'first layer weight: '
-    print mlp.v
-    print 'second layer weight: '
-    print mlp.w
+    print('--- training ---')
+    print('first layer weight: ')
+    print(mlp.v)
+    print('second layer weight: ')
+    print(mlp.w)
 
     # predict
-    print '--- predict ---'
+    print('--- predict ---')
     for i in [[0, 0], [0, 1], [1, 0], [1, 1]]:
-        print i, mlp.predict(i)
+        print(i, mlp.predict(i))
 
 if __name__ == '__main__':
     main()

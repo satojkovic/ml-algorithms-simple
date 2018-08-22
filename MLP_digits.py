@@ -1,9 +1,10 @@
+#!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
 import numpy as np
 from sklearn.datasets import load_digits
 from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelBinarizer
 from MLP import MLP
 
@@ -27,8 +28,9 @@ def main():
     for i in range(X_test.shape[0]):
         o = mlp.predict(X_test[i])
         predictions.append(np.argmax(o))
-    print confusion_matrix(y_test, predictions)
-    print classification_report(y_test, predictions)
+    print(confusion_matrix(y_test, predictions))
+    print(classification_report(y_test, predictions))
+
 
 if __name__ == '__main__':
     main()
