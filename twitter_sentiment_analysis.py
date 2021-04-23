@@ -4,6 +4,7 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import TweetTokenizer
 import re
 import string
+import os
 
 
 def process_tweet(tweet):
@@ -29,7 +30,26 @@ def process_tweet(tweet):
     return tweet_clean
 
 
+def load_words(words_txt, encoding='utf-8'):
+    words = set()
+    with open(words_txt, 'r', encoding=encoding) as f:
+        for line in f:
+            if re.match(r'^;', line) or line == '\n':
+                continue
+            words.add(line.strip())
+    return words
+
+
 if __name__ == '__main__':
+    # The dataset for the positive and negative opinion words from https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html
+    # Note: encoding of negative-words.txt is ISO-8859
+    positive_words = load_words(os.path.join(
+        'opinion-lexicon-English', 'positive-words.txt'))
+    negative_words = load_words(os.path.join(
+        'opinion-lexicon-English', 'negative-words.txt'), encoding='iso-8859-1')
+    print('Positive words: {}, Negative words: {}'.format(
+        len(positive_words), len(negative_words)))
+
     # Download dataset
     nltk.download('stopwords')
     nltk.download('twitter_samples')
