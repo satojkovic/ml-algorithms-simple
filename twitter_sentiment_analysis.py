@@ -30,6 +30,19 @@ def process_tweet(tweet):
     return tweet_clean
 
 
+def build_freqs(tweets, ys):
+    yslist = np.squeeze(ys).tolist()
+    freqs = {}
+    for tweet, y in zip(tweets, yslist):
+        for word in process_tweet(tweet):
+            pair = (word, y)
+            if pair in freqs:
+                freqs[pair] += 1
+            else:
+                freqs[pair] = 1
+    return freqs
+
+
 def load_words(words_txt, encoding='utf-8'):
     words = set()
     with open(words_txt, 'r', encoding=encoding) as f:
@@ -41,15 +54,6 @@ def load_words(words_txt, encoding='utf-8'):
 
 
 if __name__ == '__main__':
-    # The dataset for the positive and negative opinion words from https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html
-    # Note: encoding of negative-words.txt is ISO-8859
-    positive_words = load_words(os.path.join(
-        'opinion-lexicon-English', 'positive-words.txt'))
-    negative_words = load_words(os.path.join(
-        'opinion-lexicon-English', 'negative-words.txt'), encoding='iso-8859-1')
-    print('Positive words: {}, Negative words: {}'.format(
-        len(positive_words), len(negative_words)))
-
     # Download dataset
     nltk.download('stopwords')
     nltk.download('twitter_samples')
