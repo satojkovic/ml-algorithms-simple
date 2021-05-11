@@ -11,14 +11,17 @@ def profile_nltk():
     filtered = []
     reviews = df['review'][:4000]
     corpus = []
+    stopwords_set = stopwords.words('english')
+    stemmer = PorterStemmer()
     for i in tqdm(range(len(reviews))):
         rev = re.sub('[^a-zA-Z]', ' ', df['review'][i])
         rev = rev.lower()
         rev = rev.split()
         filtered = []
         for word in rev:
-            if word not in stopwords.words("english"):
-                word = PorterStemmer().stem(word)
+            # if word not in stopwords.words("english"):
+            if word not in stopwords_set:
+                word = stemmer.stem(word)
                 filtered.append(word)
         filtered = " ".join(filtered)
         corpus.append(filtered)
